@@ -1,25 +1,13 @@
 import express from "express";
 import cors from "cors";
-
-import { prisma } from "./database";
+import router from "./routes";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/health", (_req, res) => {
-  res.json({ ok: true, service: "timeslot-backend" });
-});
-
-app.get("/test-db", async (_req, res) => {
-  try {
-    const timeSlots = await prisma.timeSlot.findMany({});
-    res.json({ timeSlots, message: "Database connection successful" });
-  } catch (error) {
-    console.error("Database connection error:", error);
-    res.status(500).json({ ok: false, error: "Database connection error" });
-  }
-});
+app.use("/api", router);
 
 export default app;
