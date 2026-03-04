@@ -1,11 +1,26 @@
+import { z } from "zod";
+
+const envSchema = z.object({
+  PORT: z.coerce.number().default(4000),
+  HOST: z.string().default("localhost"),
+  POSTGRES_URL: z
+    .string()
+    .default("postgresql://user:password@localhost:5432/timeslot"),
+});
+
+const parsedEnv = envSchema.safeParse(process.env);
+
+if (!parsedEnv.success) {
+  console.error("Invalid environment variables:", parsedEnv.error.format());
+  process.exit(1);
+}
+
 export const env = {
   server: {
-    port: parseInt(process.env.PORT || "4000", 10),
-    host: process.env.HOST || "localhost",
+    port: parsedEnv.data.PORT,
+    host: parsedEnv.data.HOST,
   },
   database: {
-    url:
-      process.env.POSTGRES_URL ||
-      "postgresql://user:password@localhost:5432/timeslot",
+    url: parsedEnv.data.POSTGRES_URL,
   },
 };
