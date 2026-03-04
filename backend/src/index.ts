@@ -1,19 +1,26 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import { env } from "@/config/env";
+import { config } from "dotenv";
+config();
 
-dotenv.config();
+import { env } from "./config/env";
+import { connectToDatabase } from "./database";
+import app from "./app";
 
-const app = express();
+async function startServer() {
+  await connectToDatabase();
 
-app.use(cors());
-app.use(express.json());
+  const { port, host } = env.server;
 
-app.get("/health", (_req, res) => {
-  res.json({ ok: true, service: "timeslot-backend" });
+  app.listen(port, host, () => {
+    console.log(`Server is running at http://${host}:${port}`);
+  });
+}
+
+startServer().catch((error) => {
+  console.error("Failed to start the server:", error);
+  process.exit(1); // Exit the process with an error code
 });
 
-app.listen(env.port, () => {
-  console.log(`TimeSlot backend running on http://localhost:${env.port}`);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  process.exit(1); // Exit the process with an error code
 });
