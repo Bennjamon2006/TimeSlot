@@ -22,4 +22,6 @@ usersRouter.put(
   usersController.updateUser,
 );
 
+usersRouter.delete("/me", authValidator, usersController.deleteUser);
+
 export default usersRouter;

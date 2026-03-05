@@ -29,10 +29,17 @@ const updateUser = async (req: Request<typeof updateUserSchema>) => {
   return new Response(mapUser(updatedUser));
 };
 
+const deleteUser = async (req: Request) => {
+  await usersService.deleteUser(req.user!.id);
+
+  return new Response(null, 204);
+};
+
 const usersController = wrapController({
   createUser,
   getUser,
   updateUser,
+  deleteUser,
 });
 
 export default usersController;

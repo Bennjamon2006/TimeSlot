@@ -47,9 +47,16 @@ const updateUser = async (userId: string, updateData: UpdateUserInput) => {
   }
 };
 
+const deleteUser = async (userId: string) => {
+  await prisma.user.delete({
+    where: { id: userId },
+  });
+};
+
 const usersService = {
   createUser,
   updateUser,
+  deleteUser,
 };
 
 export default usersService;
