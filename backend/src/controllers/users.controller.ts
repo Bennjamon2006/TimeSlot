@@ -1,21 +1,18 @@
-import type { NextFunction, Request, Response } from "express";
+import type { Request, Response } from "express";
 import usersService from "@/services/users.service";
 import { CreateUserInput } from "@/schemas/createUser.schema";
+import wrapController from "@/helpers/wrapController";
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const userData: CreateUserInput = req.body;
+const createUser = async (req: Request, res: Response) => {
+  const userData: CreateUserInput = req.body;
 
-    const user = await usersService.createUser(userData);
+  const user = await usersService.createUser(userData);
 
-    res.status(201).json(user);
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json(user);
 };
 
-const usersController = {
+const usersController = wrapController({
   createUser,
-};
+});
 
 export default usersController;
