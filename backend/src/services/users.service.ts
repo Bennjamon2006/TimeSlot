@@ -1,9 +1,9 @@
 import { hashSync } from "bcrypt";
-import { User } from "@prisma/client";
 import { prisma } from "@/database";
 import RequestError from "@/helpers/RequestError";
 import isUniqueError from "@/helpers/isUniqueError";
 import { CreateUserInput } from "@/schemas/createUser.schema";
+import { UpdateUserInput } from "@/schemas/updateUser.schema";
 
 const createUser = async (userData: CreateUserInput) => {
   const hashedPassword = hashSync(userData.password, 10);
@@ -26,8 +26,30 @@ const createUser = async (userData: CreateUserInput) => {
   }
 };
 
+const updateUser = async (userId: string, updateData: UpdateUserInput) => {
+  if (updateData.password) {
+    updateData.password = hashSync(updateData.password, 10);
+  }
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+    });
+
+    return updatedUser;
+  } catch (error) {
+    if (isUniqueError(error)) {
+      throw new RequestError("Email already exists", 409, "EMAIL_EXISTS");
+    }
+
+    throw error;
+  }
+};
+
 const usersService = {
   createUser,
+  updateUser,
 };
 
 export default usersService;
