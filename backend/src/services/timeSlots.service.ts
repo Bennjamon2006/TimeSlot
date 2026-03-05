@@ -1,7 +1,11 @@
+import { prisma } from "@/database";
+
 const getTimeSlots = async () => {
-  return {
-    message: "This endpoint is not implemented yet.",
-  };
+  const timeSlots = await prisma.timeSlot.findMany({
+    orderBy: { startTime: "asc" },
+  });
+
+  return timeSlots;
 };
 
 const timeSlotsService = {
