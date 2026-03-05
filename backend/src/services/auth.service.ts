@@ -1,4 +1,4 @@
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 import { compareSync } from "bcrypt";
 import { prisma } from "@/database";
 import { LoginInput } from "@/schemas/login.schema";
@@ -29,8 +29,27 @@ const login = async (data: LoginInput) => {
   };
 };
 
+const verifyToken = async (token: string) => {
+  try {
+    const decoded = verify(token, env.auth.jwtSecret) as { userId: string };
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+    });
+
+    if (!user) {
+      throw new RequestError("Invalid session", 401, "INVALID_SESSION");
+    }
+
+    return user;
+  } catch (error) {
+    throw new RequestError("Invalid session", 401, "INVALID_SESSION");
+  }
+};
+
 const authService = {
   login,
+  verifyToken,
 };
 
 export default authService;
