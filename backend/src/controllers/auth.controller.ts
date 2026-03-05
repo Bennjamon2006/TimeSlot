@@ -1,11 +1,11 @@
-import type { Request } from "express";
 import authService from "@/services/auth.service";
-import { LoginInput } from "@/schemas/login.schema";
+import loginSchema from "@/schemas/login.schema";
 import wrapController from "@/helpers/wrapController";
 import Response from "@/helpers/Response";
+import { Request } from "@/types/Request";
 
-const login = async (req: Request) => {
-  const data: LoginInput = req.body;
+const login = async (req: Request<typeof loginSchema>) => {
+  const data = req.body;
 
   const result = await authService.login(data);
 

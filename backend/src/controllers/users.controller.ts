@@ -1,11 +1,11 @@
-import type { Request } from "express";
 import usersService from "@/services/users.service";
-import { CreateUserInput } from "@/schemas/createUser.schema";
+import createUserSchema from "@/schemas/createUser.schema";
 import wrapController from "@/helpers/wrapController";
 import Response from "@/helpers/Response";
+import { Request } from "@/types/Request";
 
-const createUser = async (req: Request) => {
-  const userData: CreateUserInput = req.body;
+const createUser = async (req: Request<typeof createUserSchema>) => {
+  const userData = req.body;
 
   const user = await usersService.createUser(userData);
 
