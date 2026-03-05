@@ -1,19 +1,25 @@
 import { z } from "zod";
 import { Request, Response, NextFunction, RequestHandler } from "express";
+import RequestError from "@/helpers/RequestError";
 
 export default function bodyValidator(schema: z.ZodTypeAny): RequestHandler {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const validatedData = schema.safeParse(req.body);
+  return (req: Request, _res: Response, next: NextFunction) => {
+    try {
+      const validatedData = schema.safeParse(req.body);
 
-    if (!validatedData.success) {
-      return res.status(400).json({
-        error: "Invalid request data",
-        code: "INVALID_REQUEST_DATA",
-        details: z.flattenError(validatedData.error).fieldErrors,
-      });
+      if (!validatedData.success) {
+        throw new RequestError(
+          "Invalid request data",
+          400,
+          "INVALID_REQUEST_DATA",
+          z.flattenError(validatedData.error).fieldErrors,
+        );
+      }
+
+      req.body = validatedData.data;
+      next();
+    } catch (error) {
+      next(error);
     }
-
-    req.body = validatedData.data;
-    next();
   };
 }

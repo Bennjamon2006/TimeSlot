@@ -1,28 +1,27 @@
 import type { Request, Response, NextFunction } from "express";
 import authService from "@/services/auth.service";
+import RequestError from "@/helpers/RequestError";
 
 export default async function authValidator(
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) {
   try {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(401).json({
-        error: "Authorization header missing",
-        code: "AUTH_HEADER_MISSING",
-      });
+      throw new RequestError(
+        "Authorization header missing",
+        401,
+        "AUTH_HEADER_MISSING",
+      );
     }
 
     const token = authHeader.split(" ")[1];
 
     if (!token) {
-      return res.status(401).json({
-        error: "Token missing",
-        code: "TOKEN_MISSING",
-      });
+      throw new RequestError("Token missing", 401, "TOKEN_MISSING");
     }
 
     const user = await authService.verifyToken(token);
