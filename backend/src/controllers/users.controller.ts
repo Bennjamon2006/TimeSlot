@@ -1,23 +1,13 @@
 import type { Request, Response } from "express";
 import usersService from "@/services/users.service";
 import RequestError from "@/helpers/RequestError";
-import createUserSchema from "@/schemas/createUser.schema";
-import z from "zod";
+import { CreateUserInput } from "@/schemas/createUser.schema";
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const validatedData = createUserSchema.safeParse(req.body);
+    const userData: CreateUserInput = req.body;
 
-    if (!validatedData.success) {
-      throw new RequestError(
-        "Invalid user data",
-        400,
-        "INVALID_USER_DATA",
-        z.treeifyError(validatedData.error).properties,
-      );
-    }
-
-    const user = await usersService.createUser(validatedData.data);
+    const user = await usersService.createUser(userData);
 
     res.status(201).json(user);
   } catch (error) {
