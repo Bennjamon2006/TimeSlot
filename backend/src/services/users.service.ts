@@ -3,8 +3,9 @@ import { User } from "@prisma/client";
 import { prisma } from "@/database";
 import RequestError from "@/helpers/RequestError";
 import isUniqueError from "@/helpers/isUniqueError";
+import { CreateUserInput } from "@/schemas/createUser.schema";
 
-const createUser = async (userData: Omit<User, "id">) => {
+const createUser = async (userData: CreateUserInput) => {
   const hashedPassword = hashSync(userData.password, 10);
 
   try {
