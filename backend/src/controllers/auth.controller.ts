@@ -1,10 +1,17 @@
-import type { Request, Response } from "express";
+import type { Request, Response, NextFunction } from "express";
 import authService from "@/services/auth.service";
+import { LoginInput } from "@/schemas/login.schema";
 
-const login = async (req: Request, res: Response) => {
-  const result = await authService.login(req.body);
+const login = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data: LoginInput = req.body;
 
-  res.json(result);
+    const result = await authService.login(data);
+
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
 };
 
 const authController = {

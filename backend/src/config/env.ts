@@ -6,6 +6,7 @@ const envSchema = z.object({
   POSTGRES_URL: z
     .string()
     .default("postgresql://user:password@localhost:5432/timeslot"),
+  JWT_SECRET: z.string().default("your_jwt_secret"),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -22,5 +23,8 @@ export const env = {
   },
   database: {
     url: parsedEnv.data.POSTGRES_URL,
+  },
+  auth: {
+    jwtSecret: parsedEnv.data.JWT_SECRET,
   },
 };
