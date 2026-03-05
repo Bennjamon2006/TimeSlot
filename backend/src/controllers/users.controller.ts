@@ -11,8 +11,15 @@ const createUser = async (req: Request, res: Response) => {
   res.status(201).json(user);
 };
 
+const getUser = async (req: Request, res: Response) => {
+  const user = req.user;
+
+  res.json(user);
+};
+
 const usersController = wrapController({
   createUser,
+  getUser,
 });
 
 export default usersController;
