@@ -1,7 +1,8 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
+import CustomResponse from "./Response";
 
 type Controller = {
-  [key: string]: RequestHandler;
+  [key: string]: (req: Request) => Promise<CustomResponse> | CustomResponse;
 };
 
 export default function wrapController<T extends Controller>(controller: T): T {
@@ -16,7 +17,9 @@ export default function wrapController<T extends Controller>(controller: T): T {
       next: NextFunction,
     ) => {
       try {
-        await handler(req, res, next);
+        const result = await handler(req);
+
+        result.send(res);
       } catch (error) {
         next(error);
       }
