@@ -8,8 +8,6 @@ export default function bodyValidator(schema: z.ZodTypeAny): RequestHandler {
       const validatedData = schema.safeParse(req.body);
 
       if (!validatedData.success) {
-        console.log(validatedData.error);
-
         throw new RequestError(
           "Invalid request data",
           400,

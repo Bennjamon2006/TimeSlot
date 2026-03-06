@@ -34,4 +34,11 @@ timeSlotsRouter.put(
   timeSlotsController.updateTimeSlot,
 );
 
+timeSlotsRouter.delete(
+  "/:id",
+  adminValidator,
+  paramsValidator(updateTimeSlotParamsSchema),
+  timeSlotsController.deleteTimeSlot,
+);
+
 export default timeSlotsRouter;

@@ -38,10 +38,21 @@ const updateTimeSlot = async (
   return new Response(updated);
 };
 
+const deleteTimeSlot = async (
+  req: Request<any, typeof updateTimeSlotParamsSchema>,
+) => {
+  const { id } = req.params;
+
+  await timeSlotsService.deleteTimeSlot(id);
+
+  return new Response({ success: true }, 204);
+};
+
 const timeSlotsController = wrapController({
   getTimeSlots,
   createTimeSlot,
   updateTimeSlot,
+  deleteTimeSlot,
 });
 
 export default timeSlotsController;

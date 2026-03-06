@@ -8,8 +8,6 @@ export default function paramsValidator(schema: z.ZodTypeAny): RequestHandler {
       const validatedData = schema.safeParse(req.params);
 
       if (!validatedData.success) {
-        console.log(validatedData.error.flatten());
-
         throw new RequestError(
           "Invalid request parameters",
           400,

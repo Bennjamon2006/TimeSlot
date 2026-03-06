@@ -70,10 +70,23 @@ const updateTimeSlot = async (
   return updated;
 };
 
+const deleteTimeSlot = async (id: string) => {
+  const existing = await prisma.timeSlot.findUnique({ where: { id } });
+  
+  if (!existing) {
+    throw new RequestError("Time slot not found", 404, "NOT_FOUND");
+  }
+
+  await prisma.timeSlot.delete({ where: { id } });
+
+  return { success: true };
+};
+
 const timeSlotsService = {
   getTimeSlots,
   createTimeSlot,
   updateTimeSlot,
+  deleteTimeSlot,
 };
 
 export default timeSlotsService;
