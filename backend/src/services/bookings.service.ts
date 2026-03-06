@@ -60,8 +60,26 @@ const deleteBooking = async (id: string, userId: string, userRole: string) => {
   await prisma.booking.delete({ where: { id } });
 };
 
+const getBookingById = async (id: string, userId: string, userRole: string) => {
+  const booking = await prisma.booking.findUnique({
+    where: { id },
+    include: { timeSlot: true, user: true },
+  });
+
+  if (!booking) {
+    throw new RequestError("Booking not found", 404, "NOT_FOUND");
+  }
+
+  if (booking.userId !== userId && userRole !== "ADMIN") {
+    throw new RequestError("Forbidden", 403, "FORBIDDEN");
+  }
+
+  return booking;
+};
+
 const bookingsService = {
   getBookings,
+  getBookingById,
   createBooking,
   deleteBooking,
 };

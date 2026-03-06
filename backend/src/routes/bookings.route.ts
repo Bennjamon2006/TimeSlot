@@ -10,6 +10,13 @@ const bookingsRouter = Router();
 
 bookingsRouter.get("/", authValidator, bookingsController.getBookings);
 
+bookingsRouter.get(
+  "/:id",
+  authValidator,
+  paramsValidator(findByIdParamsSchema),
+  bookingsController.getBookingById,
+);
+
 bookingsRouter.post(
   "/",
   authValidator,
