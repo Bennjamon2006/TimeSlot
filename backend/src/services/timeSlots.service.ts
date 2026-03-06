@@ -15,17 +15,31 @@ const getTimeSlots = async (
   const skip = (pagination.page - 1) * pagination.pageSize;
   const take = pagination.pageSize;
 
-  const timeSlots = await prisma.timeSlot.findMany({
-    orderBy: { startTime: "asc" },
-    where,
-    include: {
-      booking: true,
-    },
-    skip,
-    take,
-  });
+  const [timeSlots, total] = await prisma.$transaction([
+    prisma.timeSlot.findMany({
+      orderBy: { startTime: "asc" },
+      where,
+      include: {
+        booking: true,
+      },
+      skip,
+      take,
+    }),
+    prisma.timeSlot.count({ where }),
+  ]);
 
-  return timeSlots;
+  const totalPages = Math.ceil(total / pagination.pageSize);
+
+  return {
+    data: timeSlots,
+    pagination: {
+      total,
+      page: pagination.page,
+      took: timeSlots.length,
+      pageSize: pagination.pageSize,
+      totalPages,
+    },
+  };
 };
 
 const checkTimeSlotOverlap = async (startTime: Date, endTime: Date) => {
