@@ -3,11 +3,9 @@ import { Request } from "@/types/Request";
 import wrapController from "@/helpers/wrapController";
 import timeSlotsService from "@/services/timeSlots.service";
 import createTimeSlotSchema from "@/schemas/createTimeSlot.schema";
-import {
-  updateTimeSlotSchema,
-  updateTimeSlotParamsSchema,
-} from "@/schemas/updateTimeSlot.schema";
+import { updateTimeSlotSchema } from "@/schemas/updateTimeSlot.schema";
 import { getTimeSlotsQuerySchema } from "@/filters/getTimeSlots.filter";
+import { findByIdParamsSchema } from "@/schemas/findById.schema";
 
 const getTimeSlots = async (
   req: Request<any, any, any, typeof getTimeSlotsQuerySchema>,
@@ -28,7 +26,7 @@ const createTimeSlot = async (req: Request<typeof createTimeSlotSchema>) => {
 };
 
 const updateTimeSlot = async (
-  req: Request<typeof updateTimeSlotSchema, typeof updateTimeSlotParamsSchema>,
+  req: Request<typeof updateTimeSlotSchema, typeof findByIdParamsSchema>,
 ) => {
   const { id } = req.params;
   const data = req.body;
@@ -39,7 +37,7 @@ const updateTimeSlot = async (
 };
 
 const deleteTimeSlot = async (
-  req: Request<any, typeof updateTimeSlotParamsSchema>,
+  req: Request<any, typeof findByIdParamsSchema>,
 ) => {
   const { id } = req.params;
 
@@ -49,7 +47,7 @@ const deleteTimeSlot = async (
 };
 
 const getTimeSlotById = async (
-  req: Request<any, typeof updateTimeSlotParamsSchema>,
+  req: Request<any, typeof findByIdParamsSchema>,
 ) => {
   const { id } = req.params;
 

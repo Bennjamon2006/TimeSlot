@@ -3,13 +3,11 @@ import timeSlotsController from "@/controllers/timeSlots.controller";
 import adminValidator from "@/middlewares/adminValidator";
 import bodyValidator from "@/middlewares/bodyValidator";
 import createTimeSlotSchema from "@/schemas/createTimeSlot.schema";
-import {
-  updateTimeSlotParamsSchema,
-  updateTimeSlotSchema,
-} from "@/schemas/updateTimeSlot.schema";
+import { updateTimeSlotSchema } from "@/schemas/updateTimeSlot.schema";
 import filterParser from "@/middlewares/filterParser";
 import { getTimeSlotsQuerySchema } from "@/filters/getTimeSlots.filter";
 import paramsValidator from "@/middlewares/paramsValidator";
+import { findByIdParamsSchema } from "@/schemas/findById.schema";
 
 const timeSlotsRouter = Router();
 
@@ -21,7 +19,7 @@ timeSlotsRouter.get(
 
 timeSlotsRouter.get(
   "/:id",
-  paramsValidator(updateTimeSlotParamsSchema),
+  paramsValidator(findByIdParamsSchema),
   timeSlotsController.getTimeSlotById,
 );
 
@@ -36,14 +34,14 @@ timeSlotsRouter.put(
   "/:id",
   adminValidator,
   bodyValidator(updateTimeSlotSchema),
-  paramsValidator(updateTimeSlotParamsSchema),
+  paramsValidator(findByIdParamsSchema),
   timeSlotsController.updateTimeSlot,
 );
 
 timeSlotsRouter.delete(
   "/:id",
   adminValidator,
-  paramsValidator(updateTimeSlotParamsSchema),
+  paramsValidator(findByIdParamsSchema),
   timeSlotsController.deleteTimeSlot,
 );
 

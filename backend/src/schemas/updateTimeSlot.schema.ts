@@ -1,10 +1,6 @@
 import z from "zod";
 import dateFromString from "./dateFromString";
 
-const updateTimeSlotParamsSchema = z.object({
-  id: z.string().uuid("Invalid time slot ID format"),
-});
-
 const updateTimeSlotSchema = z
   .object({
     startTime: dateFromString("Invalid date format for startTime").optional(),
@@ -25,4 +21,4 @@ const updateTimeSlotSchema = z
 
 export type UpdateTimeSlotInput = z.infer<typeof updateTimeSlotSchema>;
 
-export { updateTimeSlotParamsSchema, updateTimeSlotSchema };
+export { updateTimeSlotSchema };
