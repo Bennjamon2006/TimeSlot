@@ -9,6 +9,7 @@ API REST para gestión de reservas de horarios.
 - **Base de datos:** PostgreSQL + Prisma 7
 - **Auth:** JWT + bcrypt
 - **Validación:** Zod
+- **Testing:** Jest + supertest
 
 ## Estructura
 
@@ -25,7 +26,58 @@ src/
 ├── routes/        # Definición de rutas
 ├── schemas/       # Schemas Zod
 ├── services/      # Lógica de negocio
-└── types/        # Tipos TS
+├── types/        # Tipos TS
+└── __tests__/    # Tests
+    ├── setup.ts      # Setup global mocks
+    ├── fixtures.ts    # Datos de prueba
+    ├── *.test.ts     # Tests unitarios (servicios)
+    └── e2e/          # Tests E2E
+        ├── setup.ts
+        ├── fixtures.ts
+        └── *.e2e.test.ts
+```
+
+## Testing
+
+### Tests Unitarios
+
+- Mocks de Prisma con jest.mock()
+- Tests de servicios (lógica de negocio)
+- Ejecución aislada sin base de datos
+
+```bash
+npm test              # Unit tests
+npm run test:watch   # Watch mode
+```
+
+### Tests E2E
+
+- Base de datos PostgreSQL real (Docker)
+- Prueban la API completa con supertest
+- Limpieza automática entre tests
+
+```bash
+# Iniciar PostgreSQL de test
+npm run docker:test:up
+
+# Ejecutar tests E2E
+npm run test:e2e
+
+# Detener PostgreSQL de test
+npm run test:e2e:stop
+```
+
+#### Docker
+
+```bash
+# docker-compose.test.yml
+postgresql://test:test@localhost:5433/timeslot_test
+```
+
+### Cobertura
+
+```bash
+npm run test:coverage
 ```
 
 ## Base de datos
@@ -97,6 +149,15 @@ Relación: User 1:N Booking, TimeSlot 1:1 Booking
 | PUT    | /api/time-slots/:id | admin | Actualizar           |
 | DELETE | /api/time-slots/:id | admin | Eliminar             |
 
+### Bookings
+
+| Método | Ruta              | Auth | Descripción         |
+| ------ | ----------------- | ---- | ------------------- |
+| GET    | /api/bookings     | JWT  | Listar mis reservas |
+| GET    | /api/bookings/:id | JWT  | Ver reserva         |
+| POST   | /api/bookings     | JWT  | Crear reserva       |
+| DELETE | /api/bookings/:id | JWT  | Eliminar reserva    |
+
 ### Filtros Time Slots
 
 Query params (todos opcionales):
@@ -130,17 +191,25 @@ npm run dev
 # Build
 npm run build
 
-# Generar Prisma Client
-npx prisma generate
+# Tests
+npm test              # Unit tests
+npm run test:e2e      # E2E tests
+npm run test:coverage # Coverage
 
-# Push schema a DB
-npx prisma db push
+# Prisma
+npx prisma generate    # Generar Client
+npx prisma db push     # Push schema
+
+# Docker test DB
+npm run docker:test:up   # Iniciar PostgreSQL test
+npm run docker:test:down # Detener PostgreSQL test
 ```
 
 ## Variables de entorno
 
 ```env
 POSTGRES_URL=postgres://user:pass@host:port/db
+POSTGRES_TEST_URL=postgres://test:test@localhost:5433/timeslot_test
 PORT=4000
 HOST=localhost
 JWT_SECRET=your_jwt_secret
