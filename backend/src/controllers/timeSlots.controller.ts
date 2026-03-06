@@ -3,6 +3,10 @@ import { Request } from "@/types/Request";
 import wrapController from "@/helpers/wrapController";
 import timeSlotsService from "@/services/timeSlots.service";
 import createTimeSlotSchema from "@/schemas/createTimeSlot.schema";
+import {
+  updateTimeSlotSchema,
+  updateTimeSlotParamsSchema,
+} from "@/schemas/updateTimeSlot.schema";
 import { getTimeSlotsQuerySchema } from "@/filters/getTimeSlots.filter";
 
 const getTimeSlots = async (
@@ -23,9 +27,21 @@ const createTimeSlot = async (req: Request<typeof createTimeSlotSchema>) => {
   return new Response(newTimeSlot, 201);
 };
 
+const updateTimeSlot = async (
+  req: Request<typeof updateTimeSlotSchema, typeof updateTimeSlotParamsSchema>,
+) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  const updated = await timeSlotsService.updateTimeSlot(id, data);
+
+  return new Response(updated);
+};
+
 const timeSlotsController = wrapController({
   getTimeSlots,
   createTimeSlot,
+  updateTimeSlot,
 });
 
 export default timeSlotsController;

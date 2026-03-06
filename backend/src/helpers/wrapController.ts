@@ -1,8 +1,11 @@
 import type { Request, Response, NextFunction, RequestHandler } from "express";
 import CustomResponse from "./Response";
+import { Request as CustomRequest } from "@/types/Request";
 
 type Controller = {
-  [key: string]: (req: Request) => Promise<CustomResponse> | CustomResponse;
+  [key: string]: (
+    req: CustomRequest<any, any, any, any>,
+  ) => Promise<CustomResponse> | CustomResponse;
 };
 
 export default function wrapController<T extends Controller>(controller: T): T {

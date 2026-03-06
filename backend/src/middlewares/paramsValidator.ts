@@ -2,23 +2,23 @@ import { z } from "zod";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import RequestError from "@/helpers/RequestError";
 
-export default function bodyValidator(schema: z.ZodTypeAny): RequestHandler {
+export default function paramsValidator(schema: z.ZodTypeAny): RequestHandler {
   return (req: Request, _res: Response, next: NextFunction) => {
     try {
-      const validatedData = schema.safeParse(req.body);
+      const validatedData = schema.safeParse(req.params);
 
       if (!validatedData.success) {
-        console.log(validatedData.error);
+        console.log(validatedData.error.flatten());
 
         throw new RequestError(
-          "Invalid request data",
+          "Invalid request parameters",
           400,
-          "INVALID_REQUEST_DATA",
+          "INVALID_REQUEST_PARAMETERS",
           z.flattenError(validatedData.error).fieldErrors,
         );
       }
 
-      req.body = validatedData.data;
+      req.params = validatedData.data as any;
       next();
     } catch (error) {
       next(error);

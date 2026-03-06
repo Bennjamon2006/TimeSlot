@@ -47,9 +47,33 @@ const createTimeSlot = async (data: CreateTimeSlotInput) => {
   return newTimeSlot;
 };
 
+const updateTimeSlot = async (
+  id: string,
+  data: Partial<CreateTimeSlotInput>,
+) => {
+  const existing = await prisma.timeSlot.findUnique({ where: { id } });
+
+  if (!existing) {
+    throw new RequestError("Time slot not found", 404, "NOT_FOUND");
+  }
+
+  const startTime = data.startTime ?? existing.startTime;
+  const endTime = data.endTime ?? existing.endTime;
+
+  await checkTimeSlotOverlap(startTime, endTime);
+
+  const updated = await prisma.timeSlot.update({
+    where: { id },
+    data,
+  });
+
+  return updated;
+};
+
 const timeSlotsService = {
   getTimeSlots,
   createTimeSlot,
+  updateTimeSlot,
 };
 
 export default timeSlotsService;
