@@ -3,9 +3,14 @@ import { Request } from "@/types/Request";
 import wrapController from "@/helpers/wrapController";
 import timeSlotsService from "@/services/timeSlots.service";
 import createTimeSlotSchema from "@/schemas/createTimeSlot.schema";
+import { getTimeSlotsQuerySchema } from "@/filters/getTimeSlots.filter";
 
-const getTimeSlots = async (req: Request) => {
-  const timeSlots = await timeSlotsService.getTimeSlots();
+const getTimeSlots = async (
+  req: Request<any, any, any, typeof getTimeSlotsQuerySchema>,
+) => {
+  console.log(req.filters);
+
+  const timeSlots = await timeSlotsService.getTimeSlots(req.filters!);
 
   return new Response(timeSlots);
 };

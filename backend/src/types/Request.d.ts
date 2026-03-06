@@ -6,4 +6,7 @@ type Request<
   B extends z.ZodTypeAny = z.ZodTypeAny,
   P extends z.ZodTypeAny = z.ZodTypeAny,
   Q extends z.ZodTypeAny = z.ZodTypeAny,
-> = ExpressRequest<z.infer<P>, any, z.infer<B>, z.infer<Q>>;
+  F extends z.ZodTypeAny = z.ZodTypeAny,
+> = ExpressRequest<z.infer<P>, any, z.infer<B>, z.infer<Q>> & {
+  filters?: z.infer<F>;
+};

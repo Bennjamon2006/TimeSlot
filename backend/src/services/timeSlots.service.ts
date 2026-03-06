@@ -1,10 +1,20 @@
 import { prisma } from "@/database";
+import {
+  getTimeSlotsFilter,
+  TimeSlotFilters,
+} from "@/filters/getTimeSlots.filter";
 import RequestError from "@/helpers/RequestError";
 import { CreateTimeSlotInput } from "@/schemas/createTimeSlot.schema";
 
-const getTimeSlots = async () => {
+const getTimeSlots = async (filters: TimeSlotFilters) => {
+  const where = getTimeSlotsFilter(filters);
+
   const timeSlots = await prisma.timeSlot.findMany({
     orderBy: { startTime: "asc" },
+    where,
+    include: {
+      booking: true,
+    },
   });
 
   return timeSlots;
