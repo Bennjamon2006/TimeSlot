@@ -25,6 +25,7 @@ export default function Home() {
 
           <Stack spacing={2} sx={{ mt: 4 }}>
             <Button
+              onClick={() => navigate("/register")}
               variant="contained"
               size="large"
               sx={{

@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 
-export default function Login() {
+export default function Register() {
   return (
     <Box
       sx={{
@@ -44,10 +44,19 @@ export default function Login() {
             textAlign="center"
             sx={{ mb: 3 }}
           >
-            Inicia sesión para continuar
+            Crea tu cuenta
           </Typography>
 
           <form>
+            <TextField
+              label="Nombre"
+              fullWidth
+              required
+              sx={{ mb: 2 }}
+              slotProps={{
+                input: { sx: { borderRadius: 2 } },
+              }}
+            />
             <TextField
               label="Email"
               type="email"
@@ -83,19 +92,19 @@ export default function Login() {
                 },
               }}
             >
-              Iniciar Sesión
+              Crear Cuenta
             </Button>
           </form>
 
           <Typography variant="body2" textAlign="center" sx={{ mt: 3 }}>
-            ¿No tienes cuenta?{" "}
+            ¿Ya tienes cuenta?{" "}
             <Link
-              to="/register"
+              to="/login"
               component={RouterLink}
               underline="hover"
               fontWeight="bold"
             >
-              Regístrate
+              Inicia sesión
             </Link>
           </Typography>
         </Paper>
