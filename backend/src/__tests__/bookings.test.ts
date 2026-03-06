@@ -100,7 +100,15 @@ describe("Bookings Service", () => {
     });
 
     it("should throw if time slot not found", async () => {
-      prismaMock.timeSlot.findUnique.mockResolvedValue(null);
+      const error = new PrismaClientKnownRequestError(
+        "Foreign key constraint failed",
+        {
+          code: "P2003",
+          clientVersion: "3.0.0",
+        },
+      );
+
+      prismaMock.booking.create.mockRejectedValue(error);
 
       await expect(
         bookingsService.createBooking(regularUser.id, "invalid"),

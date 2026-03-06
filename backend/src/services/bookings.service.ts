@@ -2,6 +2,7 @@ import { prisma } from "@/database";
 import timeSlotsService from "./timeSlots.service";
 import isUniqueError from "@/helpers/isUniqueError";
 import RequestError from "@/helpers/RequestError";
+import isForeignError from "@/helpers/isForeignError";
 
 const getBookings = async (userId: string, userRole: string) => {
   const where = userRole === "ADMIN" ? {} : { userId };
@@ -18,9 +19,6 @@ const getBookings = async (userId: string, userRole: string) => {
 };
 
 const createBooking = async (userId: string, timeSlotId: string) => {
-  // Check if time slot exists
-  await timeSlotsService.getTimeSlotById(timeSlotId);
-
   try {
     const newBooking = await prisma.booking.create({
       data: {
@@ -37,6 +35,10 @@ const createBooking = async (userId: string, timeSlotId: string) => {
         400,
         "TIME_SLOT_BOOKED",
       );
+    }
+
+    if (isForeignError(error)) {
+      throw new RequestError("Time slot not found", 404, "TIME_SLOT_NOT_FOUND");
     }
 
     throw error;
