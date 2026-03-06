@@ -1,8 +1,14 @@
+import { prisma } from "@/database";
+
 const getBookings = async () => {
-  return {
-    message:
-      "This is a placeholder for the getBookings service. Implement booking retrieval logic here.",
-  };
+  const bookings = await prisma.booking.findMany({
+    include: {
+      timeSlot: true,
+      user: true,
+    },
+  });
+
+  return bookings;
 };
 
 const bookingsService = {
