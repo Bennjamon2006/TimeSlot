@@ -19,6 +19,12 @@ timeSlotsRouter.get(
   timeSlotsController.getTimeSlots,
 );
 
+timeSlotsRouter.get(
+  "/:id",
+  paramsValidator(updateTimeSlotParamsSchema),
+  timeSlotsController.getTimeSlotById,
+);
+
 timeSlotsRouter.post(
   "/",
   adminValidator,
