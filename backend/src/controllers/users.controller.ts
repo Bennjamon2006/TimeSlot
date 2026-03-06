@@ -5,6 +5,7 @@ import Response from "@/helpers/Response";
 import { Request } from "@/types/Request";
 import updateUserSchema from "@/schemas/updateUser.schema";
 import mapUser from "@/mappers/user.mapper";
+import { findByIdParamsSchema } from "@/schemas/findById.schema";
 
 const createUser = async (req: Request<typeof createUserSchema>) => {
   const userData = req.body;
@@ -35,11 +36,39 @@ const deleteUser = async (req: Request) => {
   return new Response(null, 204);
 };
 
+const getAllUsers = async (req: Request) => {
+  const users = await usersService.getAllUsers();
+  return new Response(users.map(mapUser));
+};
+
+const getUserById = async (req: Request<any, typeof findByIdParamsSchema>) => {
+  const { id } = req.params;
+  const user = await usersService.getUserById(id);
+  return new Response(mapUser(user));
+};
+
+const updateUserById = async (req: Request<any, typeof findByIdParamsSchema>) => {
+  const { id } = req.params;
+  const data = req.body;
+  const user = await usersService.updateUserById(id, data);
+  return new Response(mapUser(user));
+};
+
+const deleteUserById = async (req: Request<any, typeof findByIdParamsSchema>) => {
+  const { id } = req.params;
+  await usersService.deleteUserById(id);
+  return new Response(null, 204);
+};
+
 const usersController = wrapController({
   createUser,
   getUser,
   updateUser,
   deleteUser,
+  getAllUsers,
+  getUserById,
+  updateUserById,
+  deleteUserById,
 });
 
 export default usersController;
