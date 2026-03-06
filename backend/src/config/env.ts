@@ -6,7 +6,7 @@ const envSchema = z.object({
   POSTGRES_URL: z
     .string()
     .default("postgresql://user:password@localhost:5432/timeslot"),
-  JWT_SECRET: z.string().default("your_jwt_secret"),
+  JWT_SECRET: z.string().default("your_jwt_secret_key"),
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
