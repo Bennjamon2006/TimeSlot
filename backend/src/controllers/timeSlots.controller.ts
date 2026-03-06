@@ -10,9 +10,15 @@ import { findByIdParamsSchema } from "@/schemas/findById.schema";
 const getTimeSlots = async (
   req: Request<any, any, any, typeof getTimeSlotsQuerySchema>,
 ) => {
-  console.log(req.filters);
+  console.log({
+    filters: req.filters,
+    pagination: req.pagination,
+  });
 
-  const timeSlots = await timeSlotsService.getTimeSlots(req.filters!);
+  const timeSlots = await timeSlotsService.getTimeSlots(
+    req.filters!,
+    req.pagination!,
+  );
 
   return new Response(timeSlots);
 };

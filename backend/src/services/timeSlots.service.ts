@@ -5,9 +5,15 @@ import {
 } from "@/filters/getTimeSlots.filter";
 import RequestError from "@/helpers/RequestError";
 import { CreateTimeSlotInput } from "@/schemas/createTimeSlot.schema";
+import { PaginationParams } from "@/schemas/pagination.schema";
 
-const getTimeSlots = async (filters: TimeSlotFilters) => {
+const getTimeSlots = async (
+  filters: TimeSlotFilters,
+  pagination: PaginationParams,
+) => {
   const where = getTimeSlotsFilter(filters);
+  const skip = (pagination.page - 1) * pagination.pageSize;
+  const take = pagination.pageSize;
 
   const timeSlots = await prisma.timeSlot.findMany({
     orderBy: { startTime: "asc" },
@@ -15,6 +21,8 @@ const getTimeSlots = async (filters: TimeSlotFilters) => {
     include: {
       booking: true,
     },
+    skip,
+    take,
   });
 
   return timeSlots;
@@ -72,7 +80,7 @@ const updateTimeSlot = async (
 
 const deleteTimeSlot = async (id: string) => {
   const existing = await prisma.timeSlot.findUnique({ where: { id } });
-  
+
   if (!existing) {
     throw new RequestError("Time slot not found", 404, "NOT_FOUND");
   }

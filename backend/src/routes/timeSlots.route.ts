@@ -8,11 +8,13 @@ import filterParser from "@/middlewares/filterParser";
 import { getTimeSlotsQuerySchema } from "@/filters/getTimeSlots.filter";
 import paramsValidator from "@/middlewares/paramsValidator";
 import { findByIdParamsSchema } from "@/schemas/findById.schema";
+import parsePagination from "@/middlewares/parsePagination";
 
 const timeSlotsRouter = Router();
 
 timeSlotsRouter.get(
   "/",
+  parsePagination,
   filterParser(getTimeSlotsQuerySchema),
   timeSlotsController.getTimeSlots,
 );
