@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { Container, Box, Button, Typography, Stack } from "@mui/material";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -36,6 +39,7 @@ export default function Home() {
               Registrarse
             </Button>
             <Button
+              onClick={() => navigate("/login")}
               variant="outlined"
               size="large"
               sx={{
