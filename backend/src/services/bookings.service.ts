@@ -3,8 +3,11 @@ import timeSlotsService from "./timeSlots.service";
 import isUniqueError from "@/helpers/isUniqueError";
 import RequestError from "@/helpers/RequestError";
 
-const getBookings = async () => {
+const getBookings = async (userId: string, userRole: string) => {
+  const where = userRole === "ADMIN" ? {} : { userId };
+
   const bookings = await prisma.booking.findMany({
+    where,
     include: {
       timeSlot: true,
       user: true,

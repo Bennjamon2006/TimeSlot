@@ -5,8 +5,11 @@ import bookingsService from "@/services/bookings.service";
 import createBookingSchema from "@/schemas/createBooking.schema";
 import { findByIdParamsSchema } from "@/schemas/findById.schema";
 
-const getBookings = async (req: Request) => {
-  const bookings = await bookingsService.getBookings();
+const getBookings = async (req: any) => {
+  const userId = req.user!.id;
+  const userRole = req.user!.role;
+
+  const bookings = await bookingsService.getBookings(userId, userRole);
 
   return new Response(bookings);
 };

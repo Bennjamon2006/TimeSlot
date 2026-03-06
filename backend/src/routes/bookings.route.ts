@@ -8,7 +8,7 @@ import paramsValidator from "@/middlewares/paramsValidator";
 
 const bookingsRouter = Router();
 
-bookingsRouter.get("/", bookingsController.getBookings);
+bookingsRouter.get("/", authValidator, bookingsController.getBookings);
 
 bookingsRouter.post(
   "/",
