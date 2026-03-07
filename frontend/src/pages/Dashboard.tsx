@@ -3,9 +3,14 @@ import useAuth from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import MyBookings from "@/components/MyBookings";
 import AvailableTimeSlots from "@/components/AvailableTimeSlots";
+import { Navigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { user } = useAuth();
+
+  if (user?.role === "ADMIN") {
+    return <Navigate to="/admin" />;
+  }
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5" }}>

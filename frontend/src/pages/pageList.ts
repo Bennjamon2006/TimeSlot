@@ -22,6 +22,13 @@ const pages = [
     Page: lazy(() => import("./Dashboard")),
     protected: true,
   },
+  {
+    name: "Admin Dashboard",
+    path: "/admin",
+    Page: lazy(() => import("./AdminDashboard")),
+    protected: true,
+    adminOnly: true,
+  },
 ];
 
 export default pages;
