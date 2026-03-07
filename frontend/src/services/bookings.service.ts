@@ -29,9 +29,14 @@ const createBooking = async (timeSlotId: string): Promise<Booking> => {
   return api.post<Booking>("/bookings", { timeSlotId });
 };
 
+const cancelBooking = async (bookingId: string): Promise<void> => {
+  return api.delete(`/bookings/${bookingId}`);
+};
+
 const bookingsService = {
   getMyBookings,
   createBooking,
+  cancelBooking,
 };
 
 export default bookingsService;

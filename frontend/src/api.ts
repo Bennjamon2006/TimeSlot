@@ -25,13 +25,11 @@ async function request<T>(
     ...options,
   });
 
-  let data: unknown;
+  let data = await response.text();
 
   try {
-    data = await response.json();
-  } catch (error) {
-    data = await response.text();
-  }
+    data = JSON.parse(data);
+  } catch (error) {}
 
   if (!response.ok) {
     if (typeof data === "object" && data !== null) {
