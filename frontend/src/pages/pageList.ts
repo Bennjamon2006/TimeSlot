@@ -16,6 +16,11 @@ const pages = [
     path: "/register",
     Page: lazy(() => import("./Register")),
   },
+  {
+    name: "Dashboard",
+    path: "/dashboard",
+    Page: lazy(() => import("./Dashboard")),
+  },
 ];
 
 export default pages;
