@@ -25,8 +25,13 @@ const getMyBookings = async (): Promise<BookingWithRelations[]> => {
   return api.get<BookingWithRelations[]>("/bookings");
 };
 
+const createBooking = async (timeSlotId: string): Promise<Booking> => {
+  return api.post<Booking>("/bookings", { timeSlotId });
+};
+
 const bookingsService = {
   getMyBookings,
+  createBooking,
 };
 
 export default bookingsService;

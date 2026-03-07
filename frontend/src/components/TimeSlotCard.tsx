@@ -2,10 +2,23 @@ import formatDate from "@/helpers/formatDate";
 import { TimeSlot } from "@/services/timeSlots.service";
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 
+import useMutation from "@/hooks/useMutation";
+import bookingsService from "@/services/bookings.service";
+
 export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
+  const createBookingMutation = useMutation(bookingsService.createBooking);
+  const disabled =
+    createBookingMutation.state === "loading" ||
+    createBookingMutation.state === "success";
+  const created = createBookingMutation.state === "success";
+
   const { startTime, endTime } = timeSlot;
 
   const formattedDate = formatDate(new Date(startTime), new Date(endTime));
+
+  const handleBooking = async () => {
+    await createBookingMutation.execute(timeSlot.id);
+  };
 
   return (
     <Card
@@ -30,8 +43,14 @@ export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
             {formattedDate.time}
           </Typography>
         </Box>
-        <Button variant="contained" size="small">
-          Reservar
+        <Button
+          variant="contained"
+          color={created ? "success" : "primary"}
+          size="small"
+          onClick={handleBooking}
+          disabled={disabled}
+        >
+          {created ? "Reservado" : disabled ? "Reservando..." : "Reservar"}
         </Button>
       </CardContent>
     </Card>

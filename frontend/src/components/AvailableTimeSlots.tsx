@@ -18,6 +18,7 @@ export default function AvailableTimeSlots() {
   const getTimeSlotsQuery = useQuery(() =>
     timeSlotsService.getTimeSlots({
       startAfter: new Date().toISOString(),
+      booked: false,
     }),
   );
   const timeSlots = getTimeSlotsQuery.data?.data || [];
