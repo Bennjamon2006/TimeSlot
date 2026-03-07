@@ -1,4 +1,4 @@
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate, Navigate } from "react-router-dom";
 import {
   Box,
   Container,
@@ -33,7 +33,7 @@ const parseRegisterError = (error: unknown): string | null => {
 };
 
 export default function Register() {
-  const { setToken } = useAuth();
+  const { setToken, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const registerMutation = useMutation(authService.register);
   const [name, setName] = useState("");
@@ -60,6 +60,10 @@ export default function Register() {
       console.error(error);
     }
   };
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
     <Box

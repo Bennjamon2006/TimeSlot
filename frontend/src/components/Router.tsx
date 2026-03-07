@@ -11,9 +11,9 @@ const PageRoute = ({
   Page: React.ComponentType;
   protected?: boolean;
 }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, state } = useAuth();
 
-  if (isProtected && !isAuthenticated) {
+  if (isProtected && state === "success" && !isAuthenticated) {
     return <Navigate to="/login" />;
   }
 
