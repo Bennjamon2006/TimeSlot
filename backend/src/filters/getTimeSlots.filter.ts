@@ -60,7 +60,7 @@ const getTimeSlotsFilter = filterBuilder<"TimeSlot", TimeSlotFilters>({
           }
         : value === false
           ? {
-              equals: null,
+              is: null,
             }
           : undefined,
   }),
