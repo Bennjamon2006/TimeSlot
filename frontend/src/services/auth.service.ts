@@ -10,11 +10,14 @@ type TokenResponse = {
   token: string;
 };
 
+type RegisterInput = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 const login = async (data: LoginInput) => {
-  const response = await api.post<TokenResponse>("/auth/login", {
-    email: data.email,
-    password: data.password,
-  });
+  const response = await api.post<TokenResponse>("/auth/login", data);
 
   return response;
 };
@@ -31,9 +34,16 @@ const loadSession = async () => {
   return null;
 };
 
+const register = async (data: RegisterInput) => {
+  const response = await api.post<TokenResponse>("/users", data);
+
+  return response;
+};
+
 const authService = {
   login,
   loadSession,
+  register,
 };
 
 export default authService;
