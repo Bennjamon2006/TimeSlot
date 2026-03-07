@@ -1,15 +1,36 @@
 import pages from "@/pages/pageList";
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Suspense } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoadingPlaceholder from "./LoadingPlaceholder";
+import useAuth from "@/hooks/useAuth";
+
+const PageRoute = ({
+  Page,
+  protected: isProtected = false,
+}: {
+  Page: React.ComponentType;
+  protected?: boolean;
+}) => {
+  const { isAuthenticated } = useAuth();
+
+  if (isProtected && !isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
+  return <Page />;
+};
 
 export default function Router() {
   return (
     <BrowserRouter>
       <Suspense fallback={<LoadingPlaceholder variant="page" />}>
         <Routes>
-          {pages.map(({ name, path, Page }) => (
-            <Route key={name} path={path} element={<Page />} />
+          {pages.map(({ name, path, Page, protected: isProtected }) => (
+            <Route
+              key={name}
+              path={path}
+              element={<PageRoute Page={Page} protected={isProtected} />}
+            />
           ))}
         </Routes>
       </Suspense>

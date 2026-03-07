@@ -55,7 +55,7 @@ export default function Register() {
       });
 
       setToken(response.token);
-      navigate("/"); // PROVISIONAL: Redirigir a la página principal después del registro
+      navigate("/dashboard");
     } catch (error) {
       console.error(error);
     }
@@ -102,6 +102,7 @@ export default function Register() {
             <TextField
               value={name}
               onChange={(e) => setName(e.target.value)}
+              disabled={disabled}
               label="Nombre"
               fullWidth
               required
@@ -113,6 +114,7 @@ export default function Register() {
             <TextField
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={disabled}
               label="Email"
               type="email"
               fullWidth
@@ -125,6 +127,7 @@ export default function Register() {
             <TextField
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={disabled}
               label="Contraseña"
               type="password"
               fullWidth
@@ -135,6 +138,7 @@ export default function Register() {
               }}
             />
             <Button
+              disabled
               type="submit"
               variant="contained"
               fullWidth

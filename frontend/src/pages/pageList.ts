@@ -20,6 +20,7 @@ const pages = [
     name: "Dashboard",
     path: "/dashboard",
     Page: lazy(() => import("./Dashboard")),
+    protected: true,
   },
 ];
 

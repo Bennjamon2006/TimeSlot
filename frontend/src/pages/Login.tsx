@@ -47,7 +47,7 @@ export default function Login() {
 
       setToken(response.token);
 
-      navigate("/"); // PROVISIONAL: Redirigir a la página principal después del login
+      navigate("/dashboard");
     } catch (err) {
       if (!(err instanceof APIError)) {
         console.error("Login error:", err);
