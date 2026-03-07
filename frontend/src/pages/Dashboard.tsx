@@ -2,7 +2,7 @@ import { Box, Container, Typography, Grid } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import MyBookings from "@/components/MyBookings";
-import AvailableBookings from "@/components/AvailableBookings";
+import AvailableTimeSlots from "@/components/AvailableTimeSlots";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -23,7 +23,7 @@ export default function Dashboard() {
         <Grid container spacing={3}>
           <MyBookings />
 
-          <AvailableBookings />
+          <AvailableTimeSlots />
         </Grid>
       </Container>
     </Box>
