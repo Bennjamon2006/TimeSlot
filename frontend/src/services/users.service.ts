@@ -1,14 +1,14 @@
 import api from "@/api";
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: "ADMIN" | "USER";
 }
 
 const getCurrentUser = async (): Promise<User> => {
-  const response = api.get<User>("/users/me");
+  const response = await api.get<User>("/users/me");
 
   return response;
 };
