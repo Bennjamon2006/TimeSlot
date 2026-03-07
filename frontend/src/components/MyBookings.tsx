@@ -5,9 +5,22 @@ import {
   Stack,
   Card,
   CardContent,
+  Box,
+  Button,
 } from "@mui/material";
 
+import BookingCard from "./BookingCard";
+import useQuery from "@/hooks/useQuery";
+import bookingsService from "@/services/bookings.service";
+
 export default function MyBookings() {
+  const getBookingsQuery = useQuery(() => bookingsService.getMyBookings());
+  const bookings = getBookingsQuery.data || [];
+
+  const handleRefresh = () => {
+    getBookingsQuery.refetch();
+  };
+
   return (
     <Grid size={{ xs: 12, md: 6 }}>
       <Paper sx={{ p: 3, borderRadius: 2 }}>
@@ -15,32 +28,28 @@ export default function MyBookings() {
           Mis Reservas
         </Typography>
         <Stack spacing={2}>
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="subtitle1" fontWeight="bold">
-                15 de Marzo, 2026
+          {getBookingsQuery.state === "loading" && (
+            <Typography variant="body1" color="text.secondary">
+              Cargando tus reservas...
+            </Typography>
+          )}
+          {getBookingsQuery.state === "success" && bookings.length === 0 && (
+            <Typography variant="body1" color="text.secondary">
+              No tienes reservas activas.
+            </Typography>
+          )}
+          {getBookingsQuery.state === "success" &&
+            bookings.map((b) => <BookingCard key={b.id} booking={b} />)}
+          {getBookingsQuery.state === "error" && (
+            <Box textAlign="center" py={5}>
+              <Typography variant="body1" color="error.main">
+                Error al cargar tus reservas.
               </Typography>
-              <Typography variant="body2" color="text.secondary">
-                09:00 - 10:00
-              </Typography>
-              <Typography variant="body2" color="success.main">
-                Confirmada
-              </Typography>
-            </CardContent>
-          </Card>
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="subtitle1" fontWeight="bold">
-                18 de Marzo, 2026
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                14:00 - 15:00
-              </Typography>
-              <Typography variant="body2" color="success.main">
-                Confirmada
-              </Typography>
-            </CardContent>
-          </Card>
+              <Button variant="outlined" sx={{ mt: 2 }} onClick={handleRefresh}>
+                Reintentar
+              </Button>
+            </Box>
+          )}
         </Stack>
       </Paper>
     </Grid>

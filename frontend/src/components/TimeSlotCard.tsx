@@ -1,22 +1,11 @@
+import formatDate from "@/helpers/formatDate";
 import { TimeSlot } from "@/services/timeSlots.service";
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 
 export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
   const { startTime, endTime } = timeSlot;
 
-  const dayString = new Date(startTime).toLocaleDateString("es-ES", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  const timeString = `${new Date(startTime).toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  })} - ${new Date(endTime).toLocaleTimeString("es-ES", {
-    hour: "2-digit",
-    minute: "2-digit",
-  })}`;
+  const formattedDate = formatDate(new Date(startTime), new Date(endTime));
 
   return (
     <Card
@@ -35,10 +24,10 @@ export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
       >
         <Box>
           <Typography variant="subtitle1" fontWeight="bold">
-            {dayString}
+            {formattedDate.day}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {timeString}
+            {formattedDate.time}
           </Typography>
         </Box>
         <Button variant="contained" size="small">
