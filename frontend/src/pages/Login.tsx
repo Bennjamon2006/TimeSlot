@@ -14,6 +14,19 @@ import authService from "@/services/auth.service";
 import { useState } from "react";
 import APIError from "@/helpers/APIError";
 import useAuth from "@/hooks/useAuth";
+import { loginMessages } from "@/constants/messages";
+
+const parseLoginError = (error: unknown): string | null => {
+  if (error === null) return null;
+
+  if (error instanceof APIError) {
+    if (error.status === 401 || error.status === 400) {
+      return loginMessages.INVALID_CREDENTIALS;
+    }
+  }
+
+  return loginMessages.UNEXPECTED_ERROR;
+};
 
 export default function Login() {
   const { setToken } = useAuth();
@@ -22,13 +35,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const disabled = loginMutation.state === "loading";
-  const error =
-    loginMutation.error instanceof APIError &&
-    (loginMutation.error.status === 401 || loginMutation.error.status === 400)
-      ? "Credenciales incorrectas. Por favor, inténtalo de nuevo."
-      : loginMutation.error
-        ? "Ocurrió un error inesperado. Por favor, inténtalo más tarde."
-        : null;
+  const error = parseLoginError(loginMutation.error);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +43,7 @@ export default function Login() {
     loginMutation.reset();
 
     try {
-      const response = await loginMutation.execute(email, password);
+      const response = await loginMutation.execute({ email, password });
 
       setToken(response.token);
 
