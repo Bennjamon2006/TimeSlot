@@ -34,7 +34,13 @@ async function request<T>(
   }
 
   if (!response.ok) {
-    throw new APIError("API request failed", response.status, data);
+    if (typeof data === "object" && data !== null) {
+      const message = (data as { error?: string }).error || "Error desconocido";
+      const code = (data as { code?: string }).code || null;
+      throw new APIError(message, response.status, code, data);
+    }
+
+    throw new APIError(String(data), response.status);
   }
 
   return data as T;
