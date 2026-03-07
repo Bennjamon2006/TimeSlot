@@ -10,12 +10,16 @@ import {
 import useAuth from "@/hooks/useAuth";
 
 export default function Header() {
-  const { user } = useAuth();
-  const initials = user!.name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase();
+  const { user, destroySession, state } = useAuth();
+  const name = state === "loading" ? "" : user!.name;
+  const initials =
+    state === "loading"
+      ? null
+      : user!.name
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .toUpperCase();
 
   return (
     <AppBar
@@ -28,13 +32,14 @@ export default function Header() {
           TimeSlot
         </Typography>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Typography variant="body2">{user?.name}</Typography>
+          <Typography variant="body2">{name}</Typography>
           <Avatar
             sx={{ width: 36, height: 36, bgcolor: "white", color: "#667eea" }}
           >
             {initials}
           </Avatar>
           <Button
+            onClick={destroySession}
             color="inherit"
             size="small"
             variant="outlined"
