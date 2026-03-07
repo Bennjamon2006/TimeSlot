@@ -5,6 +5,12 @@ import { LoginInput } from "@/schemas/login.schema";
 import { env } from "@/config/env";
 import RequestError from "@/helpers/RequestError";
 
+const signUser = (userId: string) => {
+  return sign({ userId }, env.auth.jwtSecret, {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+  });
+};
+
 const login = async (data: LoginInput) => {
   const user = await prisma.user.findUnique({
     where: { email: data.email },
@@ -20,9 +26,7 @@ const login = async (data: LoginInput) => {
     throw new RequestError("Invalid credentials", 401, "INVALID_CREDENTIALS");
   }
 
-  const token = sign({ userId: user.id }, env.auth.jwtSecret, {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
-  });
+  const token = signUser(user.id);
 
   return {
     token,
@@ -50,6 +54,7 @@ const verifyToken = async (token: string) => {
 const authService = {
   login,
   verifyToken,
+  signUser,
 };
 
 export default authService;

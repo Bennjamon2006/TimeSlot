@@ -10,9 +10,9 @@ import { findByIdParamsSchema } from "@/schemas/findById.schema";
 const createUser = async (req: Request<typeof createUserSchema>) => {
   const userData = req.body;
 
-  const user = await usersService.createUser(userData);
+  const result = await usersService.createUser(userData);
 
-  return new Response(mapUser(user), 201);
+  return new Response(result, 201);
 };
 
 const getUser = async (req: Request) => {
@@ -47,14 +47,18 @@ const getUserById = async (req: Request<any, typeof findByIdParamsSchema>) => {
   return new Response(mapUser(user));
 };
 
-const updateUserById = async (req: Request<any, typeof findByIdParamsSchema>) => {
+const updateUserById = async (
+  req: Request<any, typeof findByIdParamsSchema>,
+) => {
   const { id } = req.params;
   const data = req.body;
   const user = await usersService.updateUserById(id, data);
   return new Response(mapUser(user));
 };
 
-const deleteUserById = async (req: Request<any, typeof findByIdParamsSchema>) => {
+const deleteUserById = async (
+  req: Request<any, typeof findByIdParamsSchema>,
+) => {
   const { id } = req.params;
   await usersService.deleteUserById(id);
   return new Response(null, 204);

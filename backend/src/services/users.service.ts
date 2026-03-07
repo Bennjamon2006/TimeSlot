@@ -4,6 +4,7 @@ import RequestError from "@/helpers/RequestError";
 import isUniqueError from "@/helpers/isUniqueError";
 import { CreateUserInput } from "@/schemas/createUser.schema";
 import { UpdateUserInput } from "@/schemas/updateUser.schema";
+import authService from "./auth.service";
 
 const createUser = async (userData: CreateUserInput) => {
   const hashedPassword = hashSync(userData.password, 10);
@@ -16,7 +17,9 @@ const createUser = async (userData: CreateUserInput) => {
       },
     });
 
-    return user;
+    const token = authService.signUser(user.id);
+
+    return { token };
   } catch (error) {
     if (isUniqueError(error)) {
       throw new RequestError("Email already exists", 409, "EMAIL_EXISTS");
