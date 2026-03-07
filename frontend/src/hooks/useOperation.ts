@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from "react";
 
-type OperationState = "idle" | "loading" | "success" | "error";
+export type OperationState = "idle" | "loading" | "success" | "error";
 
 interface UseOperationResult<A extends any[], R> {
   state: OperationState;

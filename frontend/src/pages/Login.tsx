@@ -13,8 +13,10 @@ import useMutation from "@/hooks/useMutation";
 import authService from "@/services/auth.service";
 import { useState } from "react";
 import APIError from "@/helpers/APIError";
+import useAuth from "@/hooks/useAuth";
 
 export default function Login() {
+  const { setToken } = useAuth();
   const navigate = useNavigate();
   const loginMutation = useMutation(authService.login);
   const [email, setEmail] = useState("");
@@ -35,7 +37,9 @@ export default function Login() {
 
     try {
       const response = await loginMutation.execute(email, password);
-      localStorage.setItem("token", response.token);
+
+      setToken(response.token);
+
       navigate("/"); // PROVISIONAL: Redirigir a la página principal después del login
     } catch (err) {
       if (!(err instanceof APIError)) {

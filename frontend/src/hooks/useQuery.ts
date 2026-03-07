@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import useOperation from "./useOperation";
 
 export default function useQuery<R>(
@@ -8,10 +8,15 @@ export default function useQuery<R>(
   const operationRef = useRef(operation);
 
   const operationResult = useOperation<[], R>(() => operationRef.current());
+  const [refetchCount, setRefetchCount] = useState(0);
 
   useEffect(() => {
     operationResult.execute();
-  }, [...deps]);
+  }, [...deps, refetchCount]);
 
-  return operationResult;
+  const refetch = () => {
+    setRefetchCount((prev) => prev + 1);
+  };
+
+  return { ...operationResult, refetch };
 }
