@@ -11,3 +11,11 @@ export const registerMessages = {
   UNEXPECTED_ERROR:
     "Ocurrió un error inesperado. Por favor, inténtalo más tarde.",
 };
+
+export const createTimeSlotMessages = {
+  INVALID_DATES:
+    "La fecha de inicio debe ser anterior a la fecha de fin y ambas deben ser futuras.",
+  OVERLAPPING_SLOT: "El horario se superpone con otro existente.",
+  UNEXPECTED_ERROR:
+    "Ocurrió un error inesperado. Por favor, inténtalo más tarde.",
+};

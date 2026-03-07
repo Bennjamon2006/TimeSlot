@@ -1,32 +1,8 @@
 import Header from "@/components/Header";
-import {
-  Box,
-  Container,
-  Typography,
-  Button,
-  Paper,
-  Grid,
-  Card,
-  CardContent,
-  AppBar,
-  Toolbar,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
-import AdminStats from "./AdminStats";
-import CreateTimeSlot from "./CreateTimeSlot";
-import OpenBookings from "./OpenBookings";
+import { Box, Container, Grid } from "@mui/material";
+import AdminStats from "../components/AdminStats";
+import CreateTimeSlot from "../components/CreateTimeSlot";
+import OpenBookings from "../components/OpenBookings";
 
 export default function AdminDashboard() {
   return (

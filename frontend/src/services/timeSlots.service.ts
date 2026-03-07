@@ -25,7 +25,7 @@ type TimeSlotsResponse = {
   };
 };
 
-const getTimeSlots = async (params?: {
+type GetTimeSlotsParams = {
   page?: number;
   pageSize?: number;
   startAfter?: string;
@@ -33,7 +33,16 @@ const getTimeSlots = async (params?: {
   endAfter?: string;
   endBefore?: string;
   booked?: boolean;
-}): Promise<TimeSlotsResponse> => {
+};
+
+type CreateTimeSlotData = {
+  startTime: string;
+  endTime: string;
+};
+
+const getTimeSlots = async (
+  params?: GetTimeSlotsParams,
+): Promise<TimeSlotsResponse> => {
   const query = new URLSearchParams();
 
   if (params?.page) query.set("page", String(params.page));
@@ -50,8 +59,13 @@ const getTimeSlots = async (params?: {
   return api.get<TimeSlotsResponse>(endpoint);
 };
 
+const createTimeSlot = async (data: CreateTimeSlotData) => {
+  return api.post("/time-slots", data);
+};
+
 const timeSlotsService = {
   getTimeSlots,
+  createTimeSlot,
 };
 
 export default timeSlotsService;
