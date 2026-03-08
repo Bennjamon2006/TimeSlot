@@ -142,7 +142,7 @@ export default function Register() {
               }}
             />
             <Button
-              disabled
+              disabled={disabled}
               type="submit"
               variant="contained"
               fullWidth
