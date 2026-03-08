@@ -2,6 +2,30 @@
 
 API REST + Frontend para gestión de reservas de horarios.
 
+## 🚀 Demo
+
+**Live:** [https://timeslot-4ge3.onrender.com/](https://timeslot-4ge3.onrender.com/)
+
+### Screenshots
+
+![Home](./screenshots/Home.png)
+![Login](./screenshots/Login.png)
+![SignUp](./screenshots/SignUp.png)
+![Admin](./screenshots/Admin.png)
+![User](./screenshots/User.png)
+
+### Cuentas de prueba
+
+- **Admin:**
+  - Email: `admin@example.com`
+  - Contraseña: `admin-32025f53135899ad`
+
+- **Usuario:**
+  - Email: `test@example.com`
+  - Contraseña: `test1234`
+
+---
+
 ## Stack
 
 ### Backend
