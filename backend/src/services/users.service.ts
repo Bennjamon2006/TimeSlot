@@ -5,6 +5,7 @@ import isUniqueError from "@/helpers/isUniqueError";
 import { CreateUserInput } from "@/schemas/createUser.schema";
 import { UpdateUserInput } from "@/schemas/updateUser.schema";
 import authService from "./auth.service";
+import bookingsService from "./bookings.service";
 
 const createUser = async (userData: CreateUserInput) => {
   const hashedPassword = hashSync(userData.password, 10);
@@ -103,6 +104,9 @@ const deleteUserById = async (id: string) => {
   if (!user) {
     throw new RequestError("User not found", 404, "NOT_FOUND");
   }
+
+  await bookingsService.deleteAllUserBookings(user.id);
+
   await prisma.user.delete({ where: { id } });
 };
 

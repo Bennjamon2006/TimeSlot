@@ -79,11 +79,18 @@ const getBookingById = async (id: string, userId: string, userRole: string) => {
   return booking;
 };
 
+const deleteAllUserBookings = async (userId: string) => {
+  await prisma.booking.deleteMany({
+    where: { userId },
+  });
+};
+
 const bookingsService = {
   getBookings,
   getBookingById,
   createBooking,
   deleteBooking,
+  deleteAllUserBookings,
 };
 
 export default bookingsService;
