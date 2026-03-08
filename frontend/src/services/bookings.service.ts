@@ -21,7 +21,7 @@ export interface BookingWithRelations extends Booking {
   };
 }
 
-const getMyBookings = async (): Promise<BookingWithRelations[]> => {
+const getBookings = async (): Promise<BookingWithRelations[]> => {
   return api.get<BookingWithRelations[]>("/bookings");
 };
 
@@ -34,7 +34,7 @@ const cancelBooking = async (bookingId: string): Promise<void> => {
 };
 
 const bookingsService = {
-  getMyBookings,
+  getBookings,
   createBooking,
   cancelBooking,
 };
