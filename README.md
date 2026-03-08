@@ -35,7 +35,6 @@ API REST + Frontend para gestión de reservas de horarios.
 - **DB:** PostgreSQL + Prisma 7
 - **Auth:** JWT + bcrypt
 - **Validación:** Zod
-- **Docs:** Swagger (`/api-docs`)
 
 ### Frontend
 
