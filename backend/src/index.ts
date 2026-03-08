@@ -4,8 +4,10 @@ config();
 import { env } from "./config/env";
 import { connectToDatabase } from "./database";
 import app from "./app";
+import { checkAdmin } from "./checkAdmin";
 
 async function startServer() {
+  await checkAdmin();
   await connectToDatabase();
 
   const { port, host } = env.server;
