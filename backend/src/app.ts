@@ -3,6 +3,7 @@ import cors from "cors";
 import router from "./routes";
 import errorHandler from "./handlers/errorHandler";
 import notFoundHandler from "./handlers/notFoundHandler";
+import loadWeb from "./loadWeb";
 
 const app = express();
 
@@ -13,5 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api", router);
 app.use("/api", notFoundHandler);
 app.use("/api", errorHandler);
+
+loadWeb(app);
 
 export default app;
