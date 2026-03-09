@@ -7,8 +7,8 @@ import app from "./app";
 import { checkAdmin } from "./checkAdmin";
 
 async function startServer() {
-  await checkAdmin();
   await connectToDatabase();
+  await checkAdmin();
 
   const { port, host } = env.server;
 
