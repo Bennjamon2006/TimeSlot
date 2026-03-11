@@ -8,18 +8,15 @@ import {
   Typography,
 } from "@mui/material";
 import useAuth from "@/hooks/useAuth";
+import { useState } from "react";
+import ProfileView from "./ProfileView";
+import useProfile from "@/hooks/useProfile";
 
 export default function Header() {
-  const { user, destroySession, state } = useAuth();
-  const name = state === "loading" ? "" : user!.name;
-  const initials =
-    state === "loading"
-      ? null
-      : user!.name
-          .split(" ")
-          .map((n) => n[0])
-          .join("")
-          .toUpperCase();
+  const { destroySession } = useAuth();
+  const { name, initials, avatarColor } = useProfile();
+
+  const [profileOpen, setProfileOpen] = useState(false);
 
   return (
     <AppBar
@@ -32,12 +29,25 @@ export default function Header() {
           TimeSlot
         </Typography>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Typography variant="body2">{name}</Typography>
-          <Avatar
-            sx={{ width: 36, height: 36, bgcolor: "white", color: "#667eea" }}
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            onClick={() => setProfileOpen(true)}
+            sx={{ cursor: "pointer" }}
           >
-            {initials}
-          </Avatar>
+            <Typography variant="body2">{name}</Typography>
+            <Avatar
+              sx={{
+                width: 36,
+                height: 36,
+                bgcolor: "white",
+                color: avatarColor,
+              }}
+            >
+              {initials}
+            </Avatar>
+          </Stack>
           <Button
             onClick={destroySession}
             color="inherit"
@@ -49,6 +59,8 @@ export default function Header() {
           </Button>
         </Stack>
       </Toolbar>
+
+      <ProfileView opened={profileOpen} close={() => setProfileOpen(false)} />
     </AppBar>
   );
 }

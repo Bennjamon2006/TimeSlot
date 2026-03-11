@@ -19,8 +19,6 @@ export default function AuthProvider({
     loadSessionQuery.refetch();
   };
 
-  console.log(loadSessionQuery);
-
   return (
     <AuthContext.Provider
       value={{
