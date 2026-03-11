@@ -1,4 +1,3 @@
-import useProfile from "@/hooks/useProfile";
 import {
   Dialog,
   DialogTitle,
@@ -10,14 +9,20 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import { useState } from "react";
 
-type Props = {
+import useProfile from "@/hooks/useProfile";
+import DeletionConfirmation from "./DeletionConfirmation";
+
+export default function ProfileView({
+  opened,
+  close,
+}: {
   opened: boolean;
   close: () => void;
-};
-
-export default function ProfileView({ opened, close }: Props) {
+}) {
   const { name, email, initials, avatarColor, hash } = useProfile();
+  const [deletionDialogOpen, setDeletionDialogOpen] = useState(false);
 
   const password = "*".repeat(6 + (hash % 10));
 
@@ -78,10 +83,19 @@ export default function ProfileView({ opened, close }: Props) {
         <Button fullWidth variant="contained">
           Actualizar perfil
         </Button>
-        <Button fullWidth variant="outlined" color="error">
+        <Button
+          fullWidth
+          variant="outlined"
+          color="error"
+          onClick={() => setDeletionDialogOpen(true)}
+        >
           Eliminar cuenta
         </Button>
       </DialogActions>
+      <DeletionConfirmation
+        opened={deletionDialogOpen}
+        close={() => setDeletionDialogOpen(false)}
+      />
     </Dialog>
   );
 }
