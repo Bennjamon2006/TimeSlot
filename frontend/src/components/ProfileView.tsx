@@ -8,6 +8,7 @@ import {
   Stack,
   Button,
   Box,
+  TextField,
 } from "@mui/material";
 import { useState } from "react";
 
@@ -25,6 +26,39 @@ export default function ProfileView({
   const [deletionDialogOpen, setDeletionDialogOpen] = useState(false);
 
   const password = "*".repeat(6 + (hash % 10));
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState(name);
+  const [editedEmail, setEditedEmail] = useState(email);
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [editedPassword, setEditedPassword] = useState("");
+
+  const handleSaveChanges = () => {
+    const updatedProfile: Partial<{
+      name: string;
+      email: string;
+      password: string;
+    }> = {};
+
+    if (editedName !== name) {
+      updatedProfile.name = editedName;
+    }
+
+    if (editedEmail !== email) {
+      updatedProfile.email = editedEmail;
+    }
+
+    if (isEditingPassword) {
+      updatedProfile.password = editedPassword;
+    }
+
+    // Aquí iría la lógica para enviar updatedProfile al backend
+    console.log("Perfil actualizado:", updatedProfile);
+
+    setIsEditing(false);
+    setEditedPassword("");
+    setIsEditingPassword(false);
+  };
 
   return (
     <Dialog
@@ -61,36 +95,104 @@ export default function ProfileView({
             <Typography variant="caption" color="text.secondary">
               Nombre
             </Typography>
-            <Typography fontWeight="bold">{name}</Typography>
+            {isEditing ? (
+              <TextField
+                value={editedName}
+                onChange={(e) => setEditedName(e.target.value)}
+                fullWidth
+                size="small"
+              />
+            ) : (
+              <Typography fontWeight="bold">{name}</Typography>
+            )}
           </Box>
 
           <Box textAlign="center">
             <Typography variant="caption" color="text.secondary">
               Correo electrónico
             </Typography>
-            <Typography>{email}</Typography>
+            {isEditing ? (
+              <TextField
+                value={editedEmail}
+                onChange={(e) => setEditedEmail(e.target.value)}
+                fullWidth
+                size="small"
+              />
+            ) : (
+              <Typography fontWeight="bold">{email}</Typography>
+            )}
           </Box>
           <Box textAlign="center">
             <Typography variant="caption" color="text.secondary">
               Contraseña
             </Typography>
-            <Typography fontFamily="monospace">{password}</Typography>
+            {isEditing ? (
+              isEditingPassword ? (
+                <TextField
+                  value={editedPassword}
+                  onChange={(e) => setEditedPassword(e.target.value)}
+                  fullWidth
+                  size="small"
+                  type="password"
+                />
+              ) : (
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => setIsEditingPassword(true)}
+                  sx={{
+                    display: "block",
+                  }}
+                >
+                  Cambiar contraseña
+                </Button>
+              )
+            ) : (
+              <Typography fontWeight="bold">{password}</Typography>
+            )}
           </Box>
         </Stack>
       </DialogContent>
 
       <DialogActions sx={{ px: 3, pb: 3 }}>
-        <Button fullWidth variant="contained">
-          Actualizar perfil
-        </Button>
-        <Button
-          fullWidth
-          variant="outlined"
-          color="error"
-          onClick={() => setDeletionDialogOpen(true)}
-        >
-          Eliminar cuenta
-        </Button>
+        {isEditing ? (
+          <>
+            <Button
+              fullWidth
+              variant="contained"
+              color="success"
+              onClick={handleSaveChanges}
+            >
+              Guardar cambios
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="error"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancelar
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => setIsEditing(true)}
+            >
+              Actualizar perfil
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="error"
+              onClick={() => setDeletionDialogOpen(true)}
+            >
+              Eliminar cuenta
+            </Button>
+          </>
+        )}
       </DialogActions>
       <DeletionConfirmation
         opened={deletionDialogOpen}
