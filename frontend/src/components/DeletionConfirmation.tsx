@@ -31,12 +31,14 @@ export default function DeletionConfirmation({
   const navigate = useNavigate();
   const deleteUserMutation = useMutation(usersService.deleteCurrentUser);
   const disabled = deleteUserMutation.state === "loading";
-  const  error = deleteUserMutation.error ? "Error al eliminar la cuenta. Por favor, inténtalo de nuevo." : null;
+  const error = deleteUserMutation.error
+    ? "Error al eliminar la cuenta. Por favor, inténtalo de nuevo."
+    : null;
 
   const handleDelete = async () => {
     await deleteUserMutation.execute();
 
-    navigate("/goodbye");
+    navigate("/");
   };
 
   return (
@@ -86,18 +88,18 @@ export default function DeletionConfirmation({
             color="error"
             onClick={handleDelete}
             disabled={disabled}
-          > {disabled ? "Eliminando..." : "Sí, eliminar mi cuenta"}
+          >
+            {" "}
+            {disabled ? "Eliminando..." : "Sí, eliminar mi cuenta"}
           </Button>
         )}
       </DialogActions>
 
-      {
-        error && (
-          <Typography color="error" align="center" mt={2}>
-            {error}
-          </Typography>
-        )
-      }
+      {error && (
+        <Typography color="error" align="center" mt={2}>
+          {error}
+        </Typography>
+      )}
     </Dialog>
   );
 }

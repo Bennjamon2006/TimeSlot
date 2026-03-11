@@ -2,6 +2,12 @@
 
 Todas las modificaciones importantes en este proyecto se documentan aquí.
 
+## [1.1.1] - 2026-03-11
+
+### Fixed
+
+- Correción de redirección después de eliminar cuenta en el frontend.
+
 ## [1.1.0] - 2026-03-11
 
 ### Added
