@@ -51,12 +51,6 @@ const updateUser = async (userId: string, updateData: UpdateUserInput) => {
   }
 };
 
-const deleteUser = async (userId: string) => {
-  await prisma.user.delete({
-    where: { id: userId },
-  });
-};
-
 const getUser = async (id: string) => {
   const user = await prisma.user.findUnique({ where: { id } });
   if (!user) {
@@ -114,7 +108,6 @@ const usersService = {
   createUser,
   getUser,
   updateUser,
-  deleteUser,
   getAllUsers,
   getUserById,
   updateUserById,

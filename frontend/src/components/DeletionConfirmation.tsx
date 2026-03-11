@@ -1,4 +1,3 @@
-import useProfile from "@/hooks/useProfile";
 import {
   Dialog,
   DialogTitle,
@@ -8,7 +7,12 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+
+import usersService from "@/services/users.service";
+import useProfile from "@/hooks/useProfile";
+import useMutation from "@/hooks/useMutation";
 
 const normalize = (str: string) =>
   str.split(" ").filter(Boolean).join(" ").toLowerCase();
@@ -24,8 +28,15 @@ export default function DeletionConfirmation({
   const [confirmationText, setConfirmationText] = useState("");
   const isConfirmed = normalize(confirmationText) === normalize(name);
 
-  const handleDelete = () => {
-    console.log("Cuenta eliminada");
+  const navigate = useNavigate();
+  const deleteUserMutation = useMutation(usersService.deleteCurrentUser);
+  const disabled = deleteUserMutation.state === "loading";
+  const  error = deleteUserMutation.error ? "Error al eliminar la cuenta. Por favor, inténtalo de nuevo." : null;
+
+  const handleDelete = async () => {
+    await deleteUserMutation.execute();
+
+    navigate("/goodbye");
   };
 
   return (
@@ -74,11 +85,19 @@ export default function DeletionConfirmation({
             variant="contained"
             color="error"
             onClick={handleDelete}
-          >
-            Sí, eliminar mi cuenta
+            disabled={disabled}
+          > {disabled ? "Eliminando..." : "Sí, eliminar mi cuenta"}
           </Button>
         )}
       </DialogActions>
+
+      {
+        error && (
+          <Typography color="error" align="center" mt={2}>
+            {error}
+          </Typography>
+        )
+      }
     </Dialog>
   );
 }

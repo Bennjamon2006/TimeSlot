@@ -13,8 +13,13 @@ const getCurrentUser = async (): Promise<User> => {
   return response;
 };
 
+const deleteCurrentUser = async (): Promise<void> => {
+  await api.delete("/users/me");
+}
+
 const usersService = {
   getCurrentUser,
+  deleteCurrentUser,
 };
 
 export default usersService;

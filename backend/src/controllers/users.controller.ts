@@ -31,7 +31,7 @@ const updateUser = async (req: Request<typeof updateUserSchema>) => {
 };
 
 const deleteUser = async (req: Request) => {
-  await usersService.deleteUser(req.user!.id);
+  await usersService.deleteUserById(req.user!.id);
 
   return new Response(null, 204);
 };
