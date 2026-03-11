@@ -15,11 +15,20 @@ const getCurrentUser = async (): Promise<User> => {
 
 const deleteCurrentUser = async (): Promise<void> => {
   await api.delete("/users/me");
-}
+};
+
+const updateCurrentUser = async (
+  data: Partial<{ name: string; email: string; password: string }>,
+): Promise<User> => {
+  const response = await api.put<User>("/users/me", data);
+
+  return response;
+};
 
 const usersService = {
   getCurrentUser,
   deleteCurrentUser,
+  updateCurrentUser,
 };
 
 export default usersService;
