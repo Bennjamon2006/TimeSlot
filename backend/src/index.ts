@@ -5,8 +5,11 @@ import { env } from "./config/env";
 import { connectToDatabase } from "./database";
 import app from "./app";
 import { checkAdmin } from "./checkAdmin";
+import loadJobs from "./jobs";
 
 async function startServer() {
+  loadJobs();
+
   await connectToDatabase();
   await checkAdmin();
 
