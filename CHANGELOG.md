@@ -2,6 +2,14 @@
 
 Todas las modificaciones importantes en este proyecto se documentan aquí.
 
+## [1.2.0] - 2026-03-12
+
+### Added
+
+- Implementación de estado global para manejo de queries en el frontend.
+- Implementación de invalidación de queries para mantener datos actualizados.
+- Refactorización de componentes para utilizar estado global.
+
 ## [1.1.1] - 2026-03-11
 
 ### Fixed
@@ -20,7 +28,7 @@ Todas las modificaciones importantes en este proyecto se documentan aquí.
 
 - Corrección de llamada al método de eliminación de cuenta en el backend.
 
-## [1.0.0] - 2026-03-06
+## [1.0.0] - 2026-03-08
 
 ### Added
 
