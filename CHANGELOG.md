@@ -2,6 +2,13 @@
 
 Todas las modificaciones importantes en este proyecto se documentan aquí.
 
+# [1.2.0] - 2026-03-12
+
+### Added
+
+- Implementación de queries con caché, estado de carga e invalidación.
+- Refactorización de componentes para usar el nuevo sistema de queries.
+
 ## [1.1.1] - 2026-03-11
 
 ### Fixed
