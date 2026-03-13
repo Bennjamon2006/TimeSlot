@@ -10,13 +10,18 @@ export type Query<T> = {
   subscribe: (listener: () => void) => void;
   unsubscribe: (listener: () => void) => void;
   refetchTime: number | null;
+  lastFetched: number | null;
   refetch: () => Promise<void>;
   promise: Promise<void> | null;
 };
 
 export type QueryClient = {
   queries: Map<string, Query<any>>;
-  registerQuery: <T>(key: string, fn: () => Promise<T>) => Query<T>;
+  registerQuery: <T>(
+    key: string,
+    fn: () => Promise<T>,
+    refetchTime?: number,
+  ) => Query<T>;
   invalidateQuery: (key: string) => void;
 };
 

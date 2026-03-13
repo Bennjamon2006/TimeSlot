@@ -37,7 +37,11 @@ function StatCard(stat: {
 }
 
 export default function AdminStats() {
-  const getStatsQuery = useQuery("admin-stats", adminService.getAdminStats);
+  const getStatsQuery = useQuery(
+    "admin-stats",
+    adminService.getAdminStats,
+    30000,
+  );
   const stats = getStatsQuery.data;
 
   if (getStatsQuery.state === "loading") {

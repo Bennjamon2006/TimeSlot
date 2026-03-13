@@ -1,10 +1,14 @@
 import { useContext, useState, useEffect } from "react";
 import QueryClientContext from "../context/query-client/QueryClient.context";
 
-export default function useQuery<T>(key: string, fn: () => Promise<T>) {
+export default function useQuery<T>(
+  key: string,
+  fn: () => Promise<T>,
+  refetchTime?: number,
+) {
   const { registerQuery } = useContext(QueryClientContext);
 
-  const query = registerQuery<T>(key, fn);
+  const query = registerQuery<T>(key, fn, refetchTime);
 
   const [state, setState] = useState<"idle" | "loading" | "success" | "error">(
     query.state,

@@ -14,8 +14,10 @@ import useQuery from "@/hooks/useQuery";
 import bookingsService from "@/services/bookings.service";
 
 export default function MyBookings() {
-  const getBookingsQuery = useQuery("user-bookings", () =>
-    bookingsService.getBookings(),
+  const getBookingsQuery = useQuery(
+    "user-bookings",
+    () => bookingsService.getBookings(),
+    10000,
   );
   const bookings = getBookingsQuery.data || [];
 

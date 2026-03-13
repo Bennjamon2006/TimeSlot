@@ -62,6 +62,7 @@ export default function OpenBookings() {
   const getBookingsQuery = useQuery(
     "open-bookings",
     bookingsService.getBookings,
+    10000,
   );
   const bookings = getBookingsQuery.data || [];
 

@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import QueryClientContext, { Query } from "./QueryClient.context";
 
 export default function QueryClient({
@@ -9,7 +9,7 @@ export default function QueryClient({
   const queries = useRef<Map<string, Query<any>>>(new Map());
 
   const registerQuery = useCallback(
-    <T,>(key: string, fn: () => Promise<T>): Query<T> => {
+    <T,>(key: string, fn: () => Promise<T>, refetchTime?: number): Query<T> => {
       if (queries.current.has(key)) {
         return queries.current.get(key) as Query<T>;
       }
@@ -33,29 +33,28 @@ export default function QueryClient({
         listeners,
         subscribe: suscribe,
         unsubscribe: unsuscribe,
-        refetchTime: null,
+        refetchTime: refetchTime || 0,
+        lastFetched: null,
         refetch: async () => {
           if (query.promise) {
             return query.promise;
           }
 
           query.state = "loading";
-          query.refetchTime = Date.now();
-          listeners.forEach((listener) => listener());
 
           query.promise = fn()
             .then((data) => {
               query.data = data;
               query.state = "success";
-              listeners.forEach((listener) => listener());
+              query.lastFetched = Date.now();
             })
             .catch((error) => {
               query.error = error;
               query.state = "error";
-              listeners.forEach((listener) => listener());
             })
             .finally(() => {
               query.promise = null;
+              listeners.forEach((listener) => listener());
             });
 
           await query.promise;
@@ -75,6 +74,22 @@ export default function QueryClient({
     if (query) {
       query.refetch();
     }
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+
+      queries.current.forEach((query) => {
+        if (query.refetchTime && query.lastFetched! + query.refetchTime < now) {
+          query.refetch();
+        }
+      });
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (
