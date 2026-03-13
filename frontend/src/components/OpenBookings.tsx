@@ -59,7 +59,10 @@ function BookingRow(data: { booking: BookingWithRelations }) {
 }
 
 export default function OpenBookings() {
-  const getBookingsQuery = useQuery(bookingsService.getBookings);
+  const getBookingsQuery = useQuery(
+    "open-bookings",
+    bookingsService.getBookings,
+  );
   const bookings = getBookingsQuery.data || [];
 
   if (getBookingsQuery.state === "loading") {

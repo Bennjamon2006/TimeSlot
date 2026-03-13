@@ -1,4 +1,7 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import { useContext } from "react";
+
+import QueryClientContext from "@/context/query-client/QueryClient.context";
 import bookingsService, {
   BookingWithRelations,
 } from "@/services/bookings.service";
@@ -10,6 +13,7 @@ export default function BookingCard({
 }: {
   booking: BookingWithRelations;
 }) {
+  const { invalidateQuery } = useContext(QueryClientContext);
   const cancelBookingMutation = useMutation(bookingsService.cancelBooking);
   const disabled =
     cancelBookingMutation.state === "loading" ||
@@ -24,6 +28,9 @@ export default function BookingCard({
 
   const handleCancel = async () => {
     await cancelBookingMutation.execute(booking.id);
+
+    invalidateQuery("available-time-slots");
+    invalidateQuery("user-bookings");
   };
 
   return (

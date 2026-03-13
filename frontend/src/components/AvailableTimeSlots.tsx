@@ -15,12 +15,13 @@ import useQuery from "@/hooks/useQuery";
 import TimeSlotCard from "./TimeSlotCard";
 
 export default function AvailableTimeSlots() {
-  const getTimeSlotsQuery = useQuery(() =>
+  const getTimeSlotsQuery = useQuery("available-time-slots", () =>
     timeSlotsService.getTimeSlots({
       startAfter: new Date().toISOString(),
       booked: false,
     }),
   );
+
   const timeSlots = getTimeSlotsQuery.data?.data || [];
 
   const handleRefresh = () => {

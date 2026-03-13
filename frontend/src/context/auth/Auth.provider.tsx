@@ -7,7 +7,7 @@ export default function AuthProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const loadSessionQuery = useQuery(authService.loadSession);
+  const loadSessionQuery = useQuery("session", authService.loadSession);
   const isAuthenticated =
     loadSessionQuery.state === "success" && loadSessionQuery.data !== null;
   const operationData = {

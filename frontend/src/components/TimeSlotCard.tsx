@@ -1,11 +1,14 @@
 import formatDate from "@/helpers/formatDate";
-import { TimeSlot } from "@/services/timeSlots.service";
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
+import { useContext } from "react";
 
+import QueryClientContext from "@/context/query-client/QueryClient.context";
+import { TimeSlot } from "@/services/timeSlots.service";
 import useMutation from "@/hooks/useMutation";
 import bookingsService from "@/services/bookings.service";
 
 export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
+  const { invalidateQuery } = useContext(QueryClientContext);
   const createBookingMutation = useMutation(bookingsService.createBooking);
   const disabled =
     createBookingMutation.state === "loading" ||
@@ -18,6 +21,9 @@ export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
 
   const handleBooking = async () => {
     await createBookingMutation.execute(timeSlot.id);
+
+    invalidateQuery("available-time-slots");
+    invalidateQuery("user-bookings");
   };
 
   return (
