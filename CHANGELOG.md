@@ -2,6 +2,20 @@
 
 Todas las modificaciones importantes en este proyecto se documentan aquí.
 
+## [1.4.0] - 2026-03-14
+
+### Added
+
+- Vista calendario en el Dashboard.
+- Tabs para cambiar entre Mis Reservas, Horarios Disponibles y Calendario.
+- Componente DayDetails para ver detalles de un día específico.
+- Visualización de días disponibles y reservados en el calendario.
+- Botón de reservar y cancelar en el modal de detalles del día.
+
+### Fixed
+
+- Centrado de grids en Mis Reservas y Horarios Disponibles.
+
 ## [1.3.0] - 2026-03-13
 
 ### Added
