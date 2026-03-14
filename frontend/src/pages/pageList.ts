@@ -29,6 +29,12 @@ const pages = [
     protected: true,
     adminOnly: true,
   },
+  {
+    name: "Calendar View",
+    path: "/calendar",
+    Page: lazy(() => import("./CalendarView")),
+    protected: true,
+  },
 ];
 
 export default pages;

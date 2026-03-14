@@ -32,7 +32,7 @@ export default function AvailableTimeSlots() {
   };
 
   return (
-    <Grid size={{ xs: 12, md: 6 }}>
+    <Grid size={{ xs: 12, md: 8 }} mx="auto">
       <Paper sx={{ p: 3, borderRadius: 2 }}>
         <Typography variant="h6" fontWeight="bold" gutterBottom>
           Horarios Disponibles
