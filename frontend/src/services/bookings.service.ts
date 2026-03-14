@@ -9,12 +9,12 @@ export interface Booking {
 }
 
 export interface BookingWithRelations extends Booking {
-  user?: {
+  user: {
     id: string;
     name: string;
     email: string;
   };
-  timeSlot?: {
+  timeSlot: {
     id: string;
     startTime: string;
     endTime: string;

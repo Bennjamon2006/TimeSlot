@@ -1,25 +1,49 @@
-import {
-  Box,
-  Container,
-  Typography,
-  Paper,
-  Grid,
-  Card,
-  CardContent,
-  Button,
-  AppBar,
-  Toolbar,
-  Stack,
-  Tabs,
-  Tab,
-} from "@mui/material";
-import { useState } from "react";
+import { Box, Container, Typography, Paper, Grid, Stack } from "@mui/material";
+
+import getMonth from "@/helpers/getMonth";
+import timeSlotsService from "@/services/timeSlots.service";
+import bookingsService from "@/services/bookings.service";
+import useQuery from "@/hooks/useQuery";
+import LoadingPlaceholder from "@/components/LoadingPlaceholder";
 
 export default function CalendarView() {
-  // Días de ejemplo
-  const days = Array.from({ length: 31 }, (_, i) => i + 1);
-  const availableDays = [5, 8, 12, 15, 18, 22, 25, 28];
-  const bookedDays = [8, 22];
+  const { name, year, month, monthDays, firstDayOfMonth } = getMonth();
+  const days = Array.from({ length: monthDays }, (_, i) => i + 1);
+
+  const getTimeSlotsQuery = useQuery(
+    "available-time-slots",
+    () =>
+      timeSlotsService.getTimeSlots({
+        startAfter: new Date(year, month, 1).toISOString(),
+        startBefore: new Date(year, month + 1, 0, 23, 59, 59).toISOString(),
+        booked: false,
+      }),
+    10000,
+  );
+  const getBookingsQuery = useQuery(
+    "user-bookings",
+    () => bookingsService.getBookings(),
+    10000,
+  );
+
+  const availableDays = new Set(
+    getTimeSlotsQuery.data?.data.map((ts) => new Date(ts.startTime).getDate()),
+  );
+
+  const bookedDays = new Set(
+    getBookingsQuery.data?.map((b) => new Date(b.timeSlot.startTime).getDate()),
+  );
+
+  if (
+    getTimeSlotsQuery.state === "loading" ||
+    getBookingsQuery.state === "loading"
+  ) {
+    return (
+      <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5" }}>
+        <LoadingPlaceholder variant="page" />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5" }}>
@@ -27,7 +51,7 @@ export default function CalendarView() {
         {/* Calendario */}
         <Paper sx={{ p: 3, borderRadius: 2 }}>
           <Typography variant="h6" fontWeight="bold" gutterBottom>
-            Marzo 2026
+            {name} {year}
           </Typography>
 
           {/* Días de la semana */}
@@ -49,16 +73,16 @@ export default function CalendarView() {
           {/* Días del mes */}
           <Grid container spacing={1}>
             {/* Espacios vacíos para comenzar desde lunes (primer día del mes) */}
-            {Array.from({ length: 6 }).map((_, i) => (
+            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
               <Grid size={{ xs: 12 / 7 }} key={`empty-${i}`}>
                 <Box sx={{ height: 60 }} />
               </Grid>
             ))}
 
             {days.map((day) => {
-              const isAvailable = availableDays.includes(day);
-              const isBooked = bookedDays.includes(day);
-              const isToday = day === 14;
+              const isAvailable = availableDays.has(day);
+              const isBooked = bookedDays.has(day);
+              const isToday = day === new Date().getDate();
 
               return (
                 <Grid size={{ xs: 12 / 7 }} key={day}>
@@ -68,15 +92,17 @@ export default function CalendarView() {
                       border: isToday ? "2px solid #667eea" : "1px solid #eee",
                       borderRadius: 1,
                       p: 0.5,
-                      cursor: isAvailable ? "pointer" : "default",
-                      bgcolor: isBooked
-                        ? "rgba(102, 126, 234, 0.4)"
-                        : isAvailable
-                          ? "rgba(72, 187, 120, 0.4)"
+                      cursor: isAvailable || isBooked ? "pointer" : "default",
+                      bgcolor: isAvailable
+                        ? "rgba(72, 187, 120, 0.4)"
+                        : isBooked
+                          ? "rgba(102, 126, 234, 0.4)"
                           : "transparent",
                       "&:hover": isAvailable
                         ? { bgcolor: "rgba(102, 126, 234, 0.2)" }
-                        : {},
+                        : isBooked
+                          ? { bgcolor: "rgba(102, 126, 234, 0.2)" }
+                          : {},
                     }}
                   >
                     <Typography
@@ -86,15 +112,23 @@ export default function CalendarView() {
                     >
                       {day}
                     </Typography>
-                    {isAvailable && (
+                    {isAvailable ? (
                       <Typography
                         variant="caption"
                         color="success.main"
                         fontSize={9}
                       >
-                        {isBooked ? "Reservado" : "Disponible"}
+                        Disponible
                       </Typography>
-                    )}
+                    ) : isBooked ? (
+                      <Typography
+                        variant="caption"
+                        color="primary.main"
+                        fontSize={9}
+                      >
+                        Reservado
+                      </Typography>
+                    ) : null}
                   </Box>
                 </Grid>
               );
