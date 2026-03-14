@@ -117,12 +117,27 @@ const getTimeSlotById = async (id: string) => {
   return timeSlot;
 };
 
+const deletePastTimeSlots = async () => {
+  const now = new Date();
+
+  const deleted = await prisma.timeSlot.deleteMany({
+    where: {
+      endTime: {
+        lt: now,
+      },
+    },
+  });
+
+  return deleted.count;
+};
+
 const timeSlotsService = {
   getTimeSlots,
   getTimeSlotById,
   createTimeSlot,
   updateTimeSlot,
   deleteTimeSlot,
+  deletePastTimeSlots,
 };
 
 export default timeSlotsService;

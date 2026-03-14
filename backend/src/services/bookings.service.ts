@@ -85,12 +85,29 @@ const deleteAllUserBookings = async (userId: string) => {
   });
 };
 
+const deletePastBookings = async () => {
+  const now = new Date();
+
+  const deleted = await prisma.booking.deleteMany({
+    where: {
+      timeSlot: {
+        endTime: {
+          lt: now,
+        },
+      },
+    },
+  });
+
+  return deleted.count;
+};
+
 const bookingsService = {
   getBookings,
   getBookingById,
   createBooking,
   deleteBooking,
   deleteAllUserBookings,
+  deletePastBookings,
 };
 
 export default bookingsService;

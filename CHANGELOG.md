@@ -2,6 +2,14 @@
 
 Todas las modificaciones importantes en este proyecto se documentan aquí.
 
+## [1.3.0] - 2026-03-13
+
+### Added
+
+- Job programable para limpieza automática de base de datos.
+- Limpieza de reservas pasadas.
+- Limpieza de timeSlots pasados.
+
 ## [1.2.0] - 2026-03-12
 
 ### Added

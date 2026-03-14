@@ -1,7 +1,7 @@
 import { Job } from "../types/Job";
-import ExampleJob from "./ExampleJob";
+import CleanDatabaseJob from "./CleanDatabase";
 
-const jobs = [ExampleJob];
+const jobs = [CleanDatabaseJob];
 
 function scheduleJob(job: Job) {
   job
