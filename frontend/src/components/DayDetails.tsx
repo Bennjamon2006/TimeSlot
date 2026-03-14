@@ -12,12 +12,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
-import timeSlotsService, { TimeSlot } from "@/services/timeSlots.service";
-import getMonth from "@/helpers/getMonth";
-import useQuery from "@/hooks/useQuery";
-import bookingsService from "@/services/bookings.service";
-import { useMemo } from "react";
 import formatDate from "@/helpers/formatDate";
+import useDay from "@/hooks/useDay";
+import useMutation from "@/hooks/useMutation";
+import bookingsService from "@/services/bookings.service";
+import { useContext, useState } from "react";
+import QueryClientContext from "@/context/query-client/QueryClient.context";
 
 export default function DayDetails({
   day,
@@ -28,36 +28,31 @@ export default function DayDetails({
   open: boolean;
   onClose: () => void;
 }) {
-  const { month, name, year } = getMonth();
+  const { name, year, availableSlots, bookings } = useDay(day);
+  const queryClient = useContext(QueryClientContext);
+  const createBookingMutation = useMutation(bookingsService.createBooking);
+  const cancelBookingMutation = useMutation(bookingsService.cancelBooking);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<string | null>(null);
 
-  const getBookingsQuery = useQuery("user-bookings", () =>
-    bookingsService.getBookings(),
-  );
-  const getTimeSlotsQuery = useQuery(
-    "available-time-slots",
-    () =>
-      timeSlotsService.getTimeSlots({
-        startAfter: new Date(year, month, day).toISOString(),
-        booked: false,
-      }),
-    10000,
-  );
+  const isCreatingBooking = createBookingMutation.state === "loading";
+  const isCancellingBooking = cancelBookingMutation.state === "loading";
 
-  const { availableSlots, bookedSlots } = useMemo(() => {
-    const timeSlots = getTimeSlotsQuery.data?.data || [];
-    const bookings = getBookingsQuery.data || [];
+  const handleBook = async (slotId: string) => {
+    setSelectedSlot(slotId);
 
-    const availableSlots = timeSlots.filter(
-      (ts) => new Date(ts.startTime).getDate() === day,
-    );
+    await createBookingMutation.execute(slotId);
+    queryClient.invalidateQuery("available-time-slots");
+    queryClient.invalidateQuery("user-bookings");
+  };
 
-    const bookedSlots =
-      bookings
-        .filter((b) => new Date(b.timeSlot.startTime).getDate() === day)
-        .map((b) => b.timeSlot) || [];
+  const handleCancel = async (bookingId: string) => {
+    setSelectedBooking(bookingId);
 
-    return { availableSlots, bookedSlots };
-  }, [getBookingsQuery.data, getTimeSlotsQuery.data]);
+    await cancelBookingMutation.execute(bookingId);
+    queryClient.invalidateQuery("available-time-slots");
+    queryClient.invalidateQuery("user-bookings");
+  };
 
   return (
     <Dialog
@@ -82,7 +77,7 @@ export default function DayDetails({
 
       <DialogContent dividers>
         {/* Mi reserva */}
-        {bookedSlots.length > 0 && (
+        {bookings.length > 0 && (
           <Box mb={3}>
             <Typography
               variant="subtitle2"
@@ -94,12 +89,12 @@ export default function DayDetails({
               gap={1}
             >
               <EventBusyIcon fontSize="small" />
-              Mis Reservas ({bookedSlots.length})
+              Mis Reservas ({bookings.length})
             </Typography>
             <Stack spacing={1}>
-              {bookedSlots.map((slot) => (
+              {bookings.map((booking) => (
                 <Box
-                  key={slot.id}
+                  key={booking.id}
                   sx={{
                     p: 1.5,
                     bgcolor: "rgba(102, 126, 234, 0.1)",
@@ -114,8 +109,8 @@ export default function DayDetails({
                     <Typography variant="body2" fontWeight="medium">
                       {
                         formatDate(
-                          new Date(slot.startTime),
-                          new Date(slot.endTime),
+                          new Date(booking.timeSlot.startTime),
+                          new Date(booking.timeSlot.endTime),
                         ).time
                       }
                     </Typography>
@@ -125,13 +120,13 @@ export default function DayDetails({
                     size="small"
                     color="error"
                     variant="outlined"
+                    disabled={
+                      isCancellingBooking && selectedBooking === booking.id
+                    }
+                    onClick={() => handleCancel(booking.id)}
                     sx={{
                       mt: 1,
                       cursor: "pointer",
-                      "&:hover": {
-                        bgcolor: "error.main",
-                        color: "#fff",
-                      },
                     }}
                   />
                 </Box>
@@ -190,12 +185,10 @@ export default function DayDetails({
                     size="small"
                     color="success"
                     variant="outlined"
+                    disabled={isCreatingBooking && selectedSlot === slot.id}
+                    onClick={() => handleBook(slot.id)}
                     sx={{
                       cursor: "pointer",
-                      "&:hover": {
-                        bgcolor: "success.main",
-                        color: "#fff",
-                      },
                     }}
                   />
                 </Box>
