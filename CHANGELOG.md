@@ -2,6 +2,19 @@
 
 Todas las modificaciones importantes en este proyecto se documentan aquí.
 
+## [1.5.0] - 2026-03-14
+
+### Added
+
+- Vista "Hoy" en el Dashboard con tabs.
+- Sección de reserva del día actual.
+- Lista de horarios disponibles para hoy.
+- Fecha formateada en español.
+
+### Fixed
+
+- Reordenamiento de tabs: Hoy, Mis Reservas, Horarios Disponibles, Calendario.
+
 ## [1.4.0] - 2026-03-14
 
 ### Added
