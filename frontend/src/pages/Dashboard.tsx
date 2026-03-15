@@ -13,6 +13,7 @@ import Header from "@/components/Header";
 import MyBookings from "@/components/MyBookings";
 import AvailableTimeSlots from "@/components/AvailableTimeSlots";
 import CalendarView from "@/pages/CalendarView";
+import TodayView from "@/pages/TodayView";
 import { Navigate } from "react-router-dom";
 
 export default function Dashboard() {
@@ -39,6 +40,7 @@ export default function Dashboard() {
         {/* Tabs */}
         <Paper sx={{ mb: 3 }}>
           <Tabs value={tab} onChange={(_, v) => setTab(v)} centered>
+            <Tab label="Hoy" />
             <Tab label="Mis Reservas" />
             <Tab label="Horarios Disponibles" />
             <Tab label="Calendario" />
@@ -46,19 +48,21 @@ export default function Dashboard() {
         </Paper>
 
         {/* Contenido según tab */}
-        {tab === 0 && (
+        {tab === 0 && <TodayView />}
+
+        {tab === 1 && (
           <Grid container spacing={3} alignItems="stretch">
             <MyBookings />
           </Grid>
         )}
 
-        {tab === 1 && (
+        {tab === 2 && (
           <Grid container spacing={3} alignItems="stretch">
             <AvailableTimeSlots />
           </Grid>
         )}
 
-        {tab === 2 && <CalendarView />}
+        {tab === 3 && <CalendarView />}
       </Container>
     </Box>
   );

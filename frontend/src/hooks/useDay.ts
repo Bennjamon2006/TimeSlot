@@ -40,6 +40,9 @@ export default function useDay(day: number) {
     year,
     month,
     day,
+    loading:
+      getBookingsQuery.state === "loading" ||
+      getTimeSlotsQuery.state === "loading",
     ...data,
   };
 }
