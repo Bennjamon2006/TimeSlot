@@ -32,7 +32,7 @@ const pages = [
   {
     name: "Calendar View",
     path: "/calendar",
-    Page: lazy(() => import("./CalendarView")),
+    Page: lazy(() => import("../components/CalendarView")),
     protected: true,
   },
 ];

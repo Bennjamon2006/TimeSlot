@@ -12,8 +12,8 @@ import useAuth from "@/hooks/useAuth";
 import Header from "@/components/Header";
 import MyBookings from "@/components/MyBookings";
 import AvailableTimeSlots from "@/components/AvailableTimeSlots";
-import CalendarView from "@/pages/CalendarView";
-import TodayView from "@/pages/TodayView";
+import CalendarView from "@/components/CalendarView";
+import TodayView from "@/components/TodayView";
 import { Navigate } from "react-router-dom";
 
 export default function Dashboard() {
