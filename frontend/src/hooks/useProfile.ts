@@ -32,5 +32,6 @@ export default function useProfile() {
     initials,
     hash,
     avatarColor: `#${avatarColor}`,
+    role: user?.role || "USER",
   };
 }

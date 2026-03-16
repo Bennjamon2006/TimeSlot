@@ -1,4 +1,5 @@
 import { Box, Container, Typography, Paper, Grid, Stack } from "@mui/material";
+import { useMemo } from "react";
 
 import getMonth from "@/helpers/getMonth";
 import timeSlotsService from "@/services/timeSlots.service";
@@ -6,8 +7,10 @@ import bookingsService from "@/services/bookings.service";
 import useQuery from "@/hooks/useQuery";
 import LoadingPlaceholder from "@/components/LoadingPlaceholder";
 import DayCell from "@/components/DayCell";
+import useLabels from "@/hooks/useLabels";
 
 export default function CalendarView() {
+  const labels = useLabels();
   const { name, year, month, monthDays, firstDayOfMonth } = getMonth();
   const days = Array.from({ length: monthDays }, (_, i) => i + 1);
 
@@ -103,7 +106,7 @@ export default function CalendarView() {
                   borderRadius: 1,
                 }}
               />
-              <Typography variant="caption">Disponible</Typography>
+              <Typography variant="caption">{labels.available}</Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Box
@@ -114,7 +117,7 @@ export default function CalendarView() {
                   borderRadius: 1,
                 }}
               />
-              <Typography variant="caption">Reservado</Typography>
+              <Typography variant="caption">{labels.booked}</Typography>
             </Box>
           </Stack>
         </Paper>

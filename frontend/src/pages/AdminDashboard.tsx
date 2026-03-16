@@ -14,6 +14,7 @@ import AdminStats from "../components/AdminStats";
 import CreateTimeSlot from "../components/CreateTimeSlot";
 import OpenBookings from "../components/OpenBookings";
 import useProfile from "@/hooks/useProfile";
+import CalendarView from "@/components/CalendarView";
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState(0);
@@ -49,7 +50,7 @@ export default function AdminDashboard() {
             </>
           )}
 
-          {tab === 1 && <Typography>Calendario</Typography>}
+          {tab === 1 && <CalendarView />}
 
           {tab === 2 && <Typography>Horarios</Typography>}
 

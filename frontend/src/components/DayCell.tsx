@@ -1,6 +1,7 @@
 import { Grid, Box, Typography } from "@mui/material";
 import { useState } from "react";
 import DayDetails from "./DayDetails";
+import useLabels from "@/hooks/useLabels";
 
 export default function DayCell({
   day,
@@ -13,6 +14,7 @@ export default function DayCell({
   isBooked: boolean;
   isToday: boolean;
 }) {
+  const labels = useLabels();
   const [detailsOpen, setDetailsOpen] = useState(false);
 
   return (
@@ -50,11 +52,11 @@ export default function DayCell({
           </Typography>
           {isAvailable ? (
             <Typography variant="caption" color="success.main" fontSize={9}>
-              Disponible
+              {labels.available}
             </Typography>
           ) : isBooked ? (
             <Typography variant="caption" color="primary.main" fontSize={9}>
-              Reservado
+              {labels.booked}
             </Typography>
           ) : null}
         </Box>
