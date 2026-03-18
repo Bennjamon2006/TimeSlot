@@ -63,9 +63,14 @@ const createTimeSlot = async (data: CreateTimeSlotData) => {
   return api.post("/time-slots", data);
 };
 
+const deleteTimeSlot = async (id: string) => {
+  return api.delete(`/time-slots/${id}`);
+};
+
 const timeSlotsService = {
   getTimeSlots,
   createTimeSlot,
+  deleteTimeSlot,
 };
 
 export default timeSlotsService;

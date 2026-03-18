@@ -18,6 +18,8 @@ import useMutation from "@/hooks/useMutation";
 import bookingsService from "@/services/bookings.service";
 import { useContext, useState } from "react";
 import QueryClientContext from "@/context/query-client/QueryClient.context";
+import useProfile from "@/hooks/useProfile";
+import timeSlotsService from "@/services/timeSlots.service";
 
 export default function ({
   day,
@@ -29,7 +31,9 @@ export default function ({
   onClose: () => void;
 }) {
   const { name, year, availableSlots, bookings } = useDay(day);
+  const { role } = useProfile();
   const queryClient = useContext(QueryClientContext);
+  const deleteTimeSlotMutation = useMutation(timeSlotsService.deleteTimeSlot);
   const createBookingMutation = useMutation(bookingsService.createBooking);
   const cancelBookingMutation = useMutation(bookingsService.cancelBooking);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
@@ -40,6 +44,12 @@ export default function ({
 
   const handleBook = async (slotId: string) => {
     setSelectedSlot(slotId);
+
+    if (role === "ADMIN") {
+      await deleteTimeSlotMutation.execute(slotId);
+      queryClient.invalidateQuery("available-time-slots");
+      return;
+    }
 
     await createBookingMutation.execute(slotId);
     queryClient.invalidateQuery("available-time-slots");
@@ -89,7 +99,8 @@ export default function ({
               gap={1}
             >
               <EventBusyIcon fontSize="small" />
-              Mis Reservas ({bookings.length})
+              {role === "USER" ? "Mis Reservas" : "Reservas"} ({bookings.length}
+              )
             </Typography>
             <Stack spacing={1}>
               {bookings.map((booking) => (
@@ -181,7 +192,7 @@ export default function ({
                     </Typography>
                   </Box>
                   <Chip
-                    label="Reservar"
+                    label={role === "USER" ? "Reservar" : "Eliminar"}
                     size="small"
                     color="success"
                     variant="outlined"
