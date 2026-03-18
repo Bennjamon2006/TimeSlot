@@ -2,6 +2,14 @@
 
 Todas las modificaciones importantes en este proyecto se documentan aquí.
 
+## [1.6.0] - 2026-03-18
+
+# Added
+
+- Dashboard admin dividido en dos tabs.
+- Vista de reservas y timeSlots en el Dashboard admin.
+- Vista de calendario en el Dashboard admin.
+
 ## [1.5.0] - 2026-03-14
 
 ### Added
