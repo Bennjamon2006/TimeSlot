@@ -60,6 +60,7 @@ export default function Users() {
               <TableRow>
                 <TableCell>Nombre</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell>Reservas</TableCell>
                 <TableCell>Rol</TableCell>
               </TableRow>
             </TableHead>
@@ -75,6 +76,7 @@ export default function Users() {
                 >
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.bookingsCount}</TableCell>
                   <TableCell>{user.role}</TableCell>
                 </TableRow>
               ))}

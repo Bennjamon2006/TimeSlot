@@ -1,5 +1,5 @@
 import api from "@/api";
-import { User } from "./users.service";
+import { UserWithBookingsCount } from "./users.service";
 
 type AdminStats = {
   totalBookings: number;
@@ -14,7 +14,7 @@ const getAdminStats = async () => {
 };
 
 const getUsers = async () => {
-  const response = await api.get<User[]>("/users");
+  const response = await api.get<UserWithBookingsCount[]>("/users");
 
   return response;
 };

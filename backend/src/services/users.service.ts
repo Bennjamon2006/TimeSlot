@@ -62,7 +62,15 @@ const getUser = async (id: string) => {
 const getAllUsers = async () => {
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
+    include: {
+      _count: {
+        select: {
+          bookings: true,
+        },
+      },
+    },
   });
+
   return users;
 };
 

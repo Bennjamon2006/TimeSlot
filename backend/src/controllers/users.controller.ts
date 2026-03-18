@@ -38,6 +38,7 @@ const deleteUser = async (req: Request) => {
 
 const getAllUsers = async (req: Request) => {
   const users = await usersService.getAllUsers();
+
   return new Response(users.map(mapUser));
 };
 

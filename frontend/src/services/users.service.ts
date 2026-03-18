@@ -7,6 +7,10 @@ export interface User {
   role: "ADMIN" | "USER";
 }
 
+export interface UserWithBookingsCount extends User {
+  bookingsCount: number;
+}
+
 const getCurrentUser = async (): Promise<User> => {
   const response = await api.get<User>("/users/me");
 
