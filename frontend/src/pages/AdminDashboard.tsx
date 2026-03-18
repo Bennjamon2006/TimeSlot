@@ -16,6 +16,7 @@ import OpenBookings from "../components/OpenBookings";
 import useProfile from "@/hooks/useProfile";
 import CalendarView from "@/components/CalendarView";
 import AvailableTimeSlots from "@/components/AvailableTimeSlots";
+import Users from "@/components/Users";
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState(0);
@@ -55,7 +56,7 @@ export default function AdminDashboard() {
 
           {tab === 2 && <AvailableTimeSlots />}
 
-          {tab === 3 && <Typography>Usuarios</Typography>}
+          {tab === 3 && <Users />}
         </Box>
       </Container>
     </Box>

@@ -1,4 +1,5 @@
 import api from "@/api";
+import { User } from "./users.service";
 
 type AdminStats = {
   totalBookings: number;
@@ -12,8 +13,15 @@ const getAdminStats = async () => {
   return response;
 };
 
+const getUsers = async () => {
+  const response = await api.get<User[]>("/users");
+
+  return response;
+};
+
 const adminService = {
   getAdminStats,
+  getUsers,
 };
 
 export default adminService;
