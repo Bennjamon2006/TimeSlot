@@ -15,6 +15,7 @@ import CreateTimeSlot from "../components/CreateTimeSlot";
 import OpenBookings from "../components/OpenBookings";
 import useProfile from "@/hooks/useProfile";
 import CalendarView from "@/components/CalendarView";
+import AvailableTimeSlots from "@/components/AvailableTimeSlots";
 
 export default function AdminDashboard() {
   const [tab, setTab] = useState(0);
@@ -52,7 +53,7 @@ export default function AdminDashboard() {
 
           {tab === 1 && <CalendarView />}
 
-          {tab === 2 && <Typography>Horarios</Typography>}
+          {tab === 2 && <AvailableTimeSlots />}
 
           {tab === 3 && <Typography>Usuarios</Typography>}
         </Box>

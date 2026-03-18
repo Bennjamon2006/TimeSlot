@@ -3,16 +3,22 @@ import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { useContext } from "react";
 
 import QueryClientContext from "@/context/query-client/QueryClient.context";
-import { TimeSlot } from "@/services/timeSlots.service";
+import timeSlotsService, { TimeSlot } from "@/services/timeSlots.service";
 import useMutation from "@/hooks/useMutation";
 import bookingsService from "@/services/bookings.service";
+import useProfile from "@/hooks/useProfile";
 
 export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
+  const { role } = useProfile();
   const { invalidateQuery } = useContext(QueryClientContext);
   const createBookingMutation = useMutation(bookingsService.createBooking);
+  const deleteTimeSlotMutation = useMutation(() =>
+    timeSlotsService.deleteTimeSlot(timeSlot.id),
+  );
   const disabled =
     createBookingMutation.state === "loading" ||
-    createBookingMutation.state === "success";
+    createBookingMutation.state === "success" ||
+    deleteTimeSlotMutation.state === "loading";
   const created = createBookingMutation.state === "success";
 
   const { startTime, endTime } = timeSlot;
@@ -20,6 +26,12 @@ export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
   const formattedDate = formatDate(new Date(startTime), new Date(endTime));
 
   const handleBooking = async () => {
+    if (role === "ADMIN") {
+      await deleteTimeSlotMutation.execute();
+      invalidateQuery("available-time-slots");
+      return;
+    }
+
     await createBookingMutation.execute(timeSlot.id);
 
     invalidateQuery("available-time-slots");
@@ -56,7 +68,15 @@ export default function TimeSlotCard({ timeSlot }: { timeSlot: TimeSlot }) {
           onClick={handleBooking}
           disabled={disabled}
         >
-          {created ? "Reservado" : disabled ? "Reservando..." : "Reservar"}
+          {role === "ADMIN"
+            ? disabled
+              ? "Eliminando..."
+              : "Eliminar"
+            : created
+              ? "Reservado"
+              : disabled
+                ? "Reservando..."
+                : "Reservar"}
         </Button>
       </CardContent>
     </Card>
