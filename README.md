@@ -11,8 +11,16 @@ API REST + Frontend para gestión de reservas de horarios.
 ![Home](./screenshots/Home.png)
 ![Login](./screenshots/Login.png)
 ![SignUp](./screenshots/SignUp.png)
-![Admin](./screenshots/Admin.png)
-![User](./screenshots/User.png)
+![DashboardToday](./screenshots/DashboardToday.png)
+![MyBookings](./screenshots/MyBookings.png)
+![AvailableTimeSlots](./screenshots/AvailableTimeSlots.png)
+![CalendarView](./screenshots/CalendarView.png)
+![DayView](./screenshots/DayView.png)
+![ProfileView](./screenshots/ProfileView.png)
+![EditProfile](./screenshots/EditProfile.png)
+![DeleteAccount](./screenshots/DeleteAccount.png)
+![AdminDashboard](./screenshots/AdminDashboard.png)
+![AdminUsers](./screenshots/AdminUsers.png)
 
 ### Cuentas de prueba
 
@@ -69,73 +77,23 @@ TimeSlot/
 ## Inicio rápido
 
 ```bash
-# Instalar dependencias
-npm install
-
-# Backend
-cd backend
-cp .env.example .env
-npm run dev
-
-# Frontend
-cd frontend
-npm run dev
-
-# Tests
-npm test          # Unit
-npm run test:e2e  # E2E (requiere Docker)
+make prepare # Instala dependencias y configura DB
+make dev     # Inicia backend y frontend en modo desarrollo
 ```
 
-## Variables de entorno
+## Modo desarrollo
 
-### Backend
+- **Backend:** http://localhost:4000
+- **Frontend:** http://localhost:5173
 
-```env
-POSTGRES_URL=postgres://user:pass@host:port/db
-JWT_SECRET=your_jwt_secret
-PORT=4000
+Ejecuta `make dev` o `npm run dev` para iniciar ambos servicios.
+
+## Modo producción
+
+```bash
+make build   # Construye backend y frontend (o npm run build)
+make start   # Inicia backend y frontend en modo producción (o npm run start)
 ```
-
-### Frontend
-
-```env
-VITE_API_BASE_URL=http://localhost:4000/api
-```
-
-## API Endpoints
-
-### Auth
-
-| Método | Ruta                | Descripción |
-| ------ | ------------------- | ----------- |
-| POST   | /api/auth/login     | Login       |
-| POST   | /api/users/register | Registro    |
-
-### Users
-
-| Método | Ruta          | Descripción       |
-| ------ | ------------- | ----------------- |
-| GET    | /api/users/me | Mi perfil         |
-| PATCH  | /api/users/me | Actualizar perfil |
-| DELETE | /api/users/me | Eliminar cuenta   |
-| GET    | /api/users    | Listar (admin)    |
-
-### Time Slots
-
-| Método | Ruta                | Descripción      |
-| ------ | ------------------- | ---------------- |
-| GET    | /api/time-slots     | Listar (filtros) |
-| GET    | /api/time-slots/:id | Ver uno          |
-| POST   | /api/time-slots     | Crear (admin)    |
-| DELETE | /api/time-slots/:id | Eliminar (admin) |
-
-### Bookings
-
-| Método | Ruta              | Descripción   |
-| ------ | ----------------- | ------------- |
-| GET    | /api/bookings     | Mis reservas  |
-| POST   | /api/bookings     | Crear reserva |
-| DELETE | /api/bookings/:id | Cancelar      |
 
 ## Tests
 

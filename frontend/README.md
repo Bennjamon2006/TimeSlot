@@ -14,110 +14,55 @@
 src/
 ├── api.ts                 # Wrapper fetch con auth
 ├── components/           # Componentes reutilizables
-│   ├── AvailableTimeSlots.tsx
-│   ├── BookingCard.tsx
-│   ├── CreateTimeSlot.tsx
-│   ├── Header.tsx
-│   ├── LoadingPlaceholder.tsx
-│   ├── MyBookings.tsx
-│   ├── Router.tsx
-│   ├── TimeSlotCard.tsx
-│   └── ...
 ├── constants/            # Constantes (mensajes, etc)
 ├── context/auth/         # Auth Context + Provider
 ├── helpers/              # Utilidades
 ├── hooks/                # Custom hooks
-│   ├── useAuth.ts
-│   ├── useMutation.ts
-│   └── useQuery.ts
 ├── pages/                # Páginas
-│   ├── Home.tsx
-│   ├── Login.tsx
-│   ├── Register.tsx
-│   ├── Dashboard.tsx
-│   └── AdminDashboard.tsx
 └── services/             # API services
-    ├── auth.service.ts
-    ├── bookings.service.ts
-    ├── timeSlots.service.ts
-    └── users.service.ts
 ```
 
 ## Rutas
 
-| Ruta | Auth | Descripción |
-|------|------|-------------|
-| `/` | ❌ | Home |
-| `/login` | ❌ | Login |
-| `/register` | ❌ | Registro |
-| `/dashboard` | ✅ | Dashboard usuario |
-| `/admin` | ✅ (admin) | Panel admin |
+| Ruta         | Auth       | Descripción       |
+| ------------ | ---------- | ----------------- |
+| `/`          | ❌         | Home              |
+| `/login`     | ❌         | Login             |
+| `/register`  | ❌         | Registro          |
+| `/dashboard` | ✅         | Dashboard usuario |
+| `/admin`     | ✅ (admin) | Panel admin       |
 
-## Hooks
+## QueryClient
+
+La aplicación utiliza React Context para manejar el fetching de datos y el estado global. Incluyendo manejo de loading, errores y cache. No se utiliza una librería externa como React Query para mantener la simplicidad.
+
+## Custom Hooks
+
+Se han creado custom hooks para encapsular la lógica de fetching y manejo de estado. Por ejemplo:
 
 ### useQuery
 
 ```tsx
-const query = useQuery(() => api.get('/endpoint'));
-// query.state: 'idle' | 'loading' | 'success' | 'error'
-// query.data
-// query.error
-// query.refetch()
+const getUsersQuery = useQuery("user-bookings", () =>
+  bookingsService.getBookings(),
+);
 ```
 
 ### useMutation
 
 ```tsx
-const mutation = useMutation(api.post('/endpoint'));
-// mutation.state
-// mutation.execute(body)
-// mutation.reset()
+const createBookingMutation = useMutation((data) =>
+  bookingsService.createBooking(data),
+);
 ```
 
 ### useAuth
 
 ```tsx
-const { isAuthenticated, user, setToken, logout } = useAuth();
+const { user, login, logout } = useAuth();
 ```
 
-## Servicios
-
-### authService
-```ts
-login(email, password)
-register(name, email, password)
-loadSession()
-```
-
-### usersService
-```ts
-getCurrentUser()
-updateUser(data)
-deleteUser()
-```
-
-### timeSlotsService
-```ts
-getTimeSlots(params?)  // { page, pageSize, startAfter, ... }
-getTimeSlotById(id)
-```
-
-### bookingsService
-```ts
-getMyBookings()
-getBookingById(id)
-createBooking(timeSlotId)
-deleteBooking(id)
-```
-
-## API
-
-El wrapper `api.ts` automáticamente agrega el token JWT del localStorage:
-
-```ts
-const res = await api.post('/auth/login', { email, password });
-// Headers: { Authorization: 'Bearer <token>' }
-```
+Entre otras funcionalidades, estos hooks manejan el estado de loading, errores y cache de manera centralizada, lo que simplifica el código en los componentes.
 
 ## Scripts
 

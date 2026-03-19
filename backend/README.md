@@ -138,6 +138,7 @@ Relación: User 1:N Booking, TimeSlot 1:1 Booking
 | GET    | /api/users/me | JWT     | Ver perfil        |
 | PUT    | /api/users/me | JWT     | Actualizar perfil |
 | DELETE | /api/users/me | JWT     | Eliminar cuenta   |
+| GET    | /api/users/   | admin   | Listar usuarios   |
 
 ### Time Slots
 
@@ -157,6 +158,12 @@ Relación: User 1:N Booking, TimeSlot 1:1 Booking
 | GET    | /api/bookings/:id | JWT  | Ver reserva         |
 | POST   | /api/bookings     | JWT  | Crear reserva       |
 | DELETE | /api/bookings/:id | JWT  | Eliminar reserva    |
+
+### Admin
+
+| Método | Ruta            | Auth  | Descripción      |
+| ------ | --------------- | ----- | ---------------- |
+| GET    | /api/statistics | admin | Ver estadísticas |
 
 ### Filtros Time Slots
 
